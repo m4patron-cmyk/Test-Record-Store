@@ -1367,55 +1367,120 @@
     }
     .btn-checkout-now:hover { background: #a00f26; }
 
-    /* ── MOBILE CART FAB ───────────────────────────── */
-    .mob-cart-fab { display: none; }
+    /* ── CART FAB (all devices) ────────────────────── */
+    .mob-cart-fab {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 500;
+      background: var(--red);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 13px 22px;
+      font-family: 'Oswald', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 4px 18px rgba(0,0,0,.55);
+      transition: transform .15s, box-shadow .15s;
+    }
+    .mob-cart-fab:not(.hidden) { display: flex; }
+    .mob-cart-fab:hover { transform: scale(1.04); }
+    .mob-cart-fab:active { transform: scale(.95); box-shadow: 0 2px 10px rgba(0,0,0,.4); }
+    .mob-cart-fab svg { flex-shrink: 0; }
+    .mob-cart-fab .fab-count {
+      background: #fff;
+      color: var(--red);
+      font-size: 11px;
+      font-weight: 700;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 3px;
+    }
+    /* On mobile, move toast to top so it clears the FAB */
     @media (hover: none) and (pointer: coarse) {
-      .mob-cart-fab {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        position: fixed;
-        bottom: 20px;
-        right: 18px;
-        z-index: 500;
-        background: var(--red);
-        color: #fff;
-        border: none;
-        border-radius: 50px;
-        padding: 13px 20px;
-        font-family: 'Oswald', sans-serif;
-        font-size: 14px;
-        font-weight: 600;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        cursor: pointer;
-        box-shadow: 0 4px 18px rgba(0,0,0,.55);
-        transition: transform .15s, box-shadow .15s;
-      }
-      .mob-cart-fab:active { transform: scale(.95); box-shadow: 0 2px 10px rgba(0,0,0,.4); }
-      .mob-cart-fab svg { flex-shrink: 0; }
-      .mob-cart-fab .fab-count {
-        background: #fff;
-        color: var(--red);
-        font-size: 11px;
-        font-weight: 700;
-        min-width: 18px;
-        height: 18px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0 3px;
-      }
-      .mob-cart-fab.hidden { display: none; }
-      /* move toast to top so it never overlaps FAB or cart drawer */
-      .toast {
-        bottom: auto;
-        top: 80px;
-        transform: translateX(-50%) translateY(-80px);
-      }
+      .toast { bottom: auto; top: 80px; transform: translateX(-50%) translateY(-80px); }
       .toast.show { transform: translateX(-50%) translateY(0); }
     }
+
+    /* ── FORMAT PICKER MODAL ────────────────────────── */
+    .fmt-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.75);
+      z-index: 900;
+      align-items: center;
+      justify-content: center;
+    }
+    .fmt-overlay.open { display: flex; }
+    .fmt-modal {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--red);
+      padding: 36px 32px 28px;
+      max-width: 360px;
+      width: 92%;
+      text-align: center;
+    }
+    .fmt-modal-label {
+      font-family: 'Oswald', sans-serif;
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .fmt-modal-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .fmt-modal-artist {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+    .fmt-btns { display: flex; gap: 12px; }
+    .fmt-btn {
+      flex: 1;
+      padding: 16px 10px;
+      border: 1px solid var(--border);
+      background: var(--bg3);
+      color: var(--text);
+      font-family: 'Oswald', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+    }
+    .fmt-btn:hover { border-color: var(--red); background: var(--bg4); color: #fff; }
+    .fmt-cancel {
+      display: block;
+      margin: 18px auto 0;
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 12px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      text-decoration: underline;
+    }
+    .fmt-cancel:hover { color: var(--text); }
 
     /* ── TOAST ─────────────────────────────────────── */
     .toast {
@@ -2154,6 +2219,18 @@
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
+<div class="fmt-overlay" id="fmt-overlay" onclick="if(event.target===this)closeFmtModal()">
+  <div class="fmt-modal">
+    <div class="fmt-modal-label">Available In</div>
+    <div class="fmt-modal-title" id="fmt-modal-title"></div>
+    <div class="fmt-modal-artist" id="fmt-modal-artist"></div>
+    <div class="fmt-btns">
+      <button class="fmt-btn" onclick="selectFmt('vinyl')">Vinyl LP</button>
+      <button class="fmt-btn" onclick="selectFmt('cd')">CD</button>
+    </div>
+    <button class="fmt-cancel" onclick="closeFmtModal()">Cancel</button>
+  </div>
+</div>
 <button class="mob-cart-fab hidden" id="mob-cart-fab" onclick="openCart()" aria-label="Open cart">
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
   Cart
@@ -2234,7 +2311,6 @@ const products = [
   {id:59,title:'Stop at Nothing',artist:'Dying Fetus',genre:'metal',type:'vinyl',price:29.99,badge:'',c:'#060606',l:'#1e1e1e',localArt:'album covers/art-stop-at-nothing.jpg'},
   {id:60,title:'War of Attrition',artist:'Dying Fetus',genre:'metal',type:'vinyl',price:29.99,badge:'',c:'#0e0600',l:'#3a1800',localArt:'album covers/art-war-of-attrition.jpg'},
   {id:61,title:'Descend into Depravity',artist:'Dying Fetus',genre:'metal',type:'vinyl',price:29.99,badge:'',c:'#060e0e',l:'#1a3a3a',localArt:'album covers/art-descend-into-depravity.jpg'},
-  {id:62,title:'Reign Supreme',artist:'Dying Fetus',genre:'metal',type:'vinyl',hasBoth:true,price:29.99,badge:'',c:'#080808',l:'#222222',localArt:'album covers/art-reign-supreme.jpg'},
   {id:63,title:'Wrong One to Fuck With',artist:'Dying Fetus',genre:'metal',type:'vinyl',price:32.99,badge:'staff',c:'#0e0000',l:'#5a0000',localArt:'album covers/art-wrong-one-to-fuck-with.jpg'},
   {id:64,title:'Make Them Beg for Death',artist:'Dying Fetus',genre:'metal',type:'cd',price:13.99,badge:'new',c:'#1a0000',l:'#7a0000',localArt:'album covers/art-make-them-beg-for-death.jpg'},
   {id:65,title:'Master of Reality',artist:'Black Sabbath',genre:'metal',type:'cd',price:13.99,badge:'rare',c:'#080a00',l:'#1e2800',localArt:'album covers/art-master-of-reality.jpg'},
@@ -2438,15 +2514,45 @@ function scrollCarousel(id,dir){
   el.scrollBy({left: dir*240, behavior:'smooth'});
 }
 
+/* ─── FORMAT MODAL ──────────────────────────────────── */
+let _fmtPendingId = null;
+function showFmtModal(id){
+  const p = products.find(x=>x.id===id);
+  if(!p) return;
+  _fmtPendingId = id;
+  document.getElementById('fmt-modal-title').textContent = p.title;
+  document.getElementById('fmt-modal-artist').textContent = p.artist;
+  document.getElementById('fmt-overlay').classList.add('open');
+}
+function closeFmtModal(){
+  document.getElementById('fmt-overlay').classList.remove('open');
+  _fmtPendingId = null;
+}
+function selectFmt(fmt){
+  const id = _fmtPendingId;
+  closeFmtModal();
+  if(id===null) return;
+  addToCartDirect(id, fmt);
+}
+
 /* ─── CART ──────────────────────────────────────────── */
 function addToCart(id){
   const p = products.find(x=>x.id===id);
   if(!p) return;
-  const ex = cart.find(x=>x.id===id);
+  if(p.hasBoth){ showFmtModal(id); return; }
+  addToCartDirect(id, null);
+}
+function addToCartDirect(id, fmt){
+  const p = products.find(x=>x.id===id);
+  if(!p) return;
+  const key = fmt ? `${id}-${fmt}` : String(id);
+  const ex = cart.find(x=>x._key===key);
   if(ex) ex.qty++;
-  else cart.push({...p,qty:1});
+  else cart.push({...p, qty:1, _key:key, type:fmt||p.type});
   updateCount();
-  showToast(`"${p.title}" added to cart`);
+  const fl = fmt==='cd'?'CD':fmt==='vinyl'?'Vinyl LP':'';
+  showToast(`"${p.title}"${fl?' ('+fl+')':''} added to cart`);
+  renderAllMobCtrls();
 }
 
 function updateCount(){
@@ -2475,11 +2581,13 @@ function closeCart(){
 }
 function overlayClick(e){ if(e.target.id==='cart-overlay') closeCart(); }
 
-function removeFromCart(id){
-  cart=cart.filter(x=>x.id!==id);
+function removeFromCart(key){
+  const item = cart.find(x=>x._key===key);
+  const id = item ? item.id : null;
+  cart=cart.filter(x=>x._key!==key);
   updateCount();
   renderDrawer();
-  renderMobCtrl(id);
+  if(id!==null) renderMobCtrl(id);
 }
 
 /* ── MOBILE QUANTITY CONTROLS ── */
@@ -2513,7 +2621,7 @@ function mobPlus(id){
 function mobMinus(id){
   const ex=cart.find(x=>x.id===id);
   if(!ex) return;
-  if(ex.qty<=1){ removeFromCart(id); }
+  if(ex.qty<=1){ removeFromCart(ex._key); }
   else { ex.qty--; updateCount(); renderMobCtrl(id); if(document.getElementById('cart-overlay').classList.contains('open')) renderDrawer(); }
 }
 
@@ -2535,7 +2643,7 @@ function renderDrawer(){
         <div class="di-meta">${item.type==='cd'?'CD':'Vinyl'} × ${item.qty}</div>
         <div class="di-price">$${(item.price*item.qty).toFixed(2)}</div>
       </div>
-      <button class="di-remove" onclick="removeFromCart(${item.id})" title="Remove">✕</button>
+      <button class="di-remove" onclick="removeFromCart('${item._key}')" title="Remove">✕</button>
     </div>`).join('');
   document.getElementById('drawer-total').textContent=`$${total.toFixed(2)}`;
   foot.style.display='block';
