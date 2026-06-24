@@ -1503,6 +1503,59 @@
       color: var(--muted); font-size: 26px; cursor: pointer;
     }
 
+    /* ── MOBILE CARD CONTROLS (touch devices only) ── */
+    .card-mob-ctrl { display: none; }
+    @media (hover: none) and (pointer: coarse) {
+      .card-overlay { display: none !important; }
+      .card-mob-ctrl {
+        display: flex;
+        position: absolute;
+        bottom: 8px; right: 8px;
+        z-index: 4;
+        align-items: center;
+        gap: 3px;
+      }
+      .cmob-add {
+        background: var(--red);
+        color: #fff;
+        border: none;
+        width: 34px; height: 34px;
+        font-size: 22px; font-weight: 700;
+        cursor: pointer;
+        border-radius: 4px;
+        display: flex; align-items: center; justify-content: center;
+        line-height: 1;
+      }
+      .cmob-minus {
+        background: rgba(30,30,30,.92);
+        color: #fff;
+        border: 1px solid var(--border);
+        width: 30px; height: 30px;
+        font-size: 15px;
+        cursor: pointer;
+        border-radius: 4px;
+        display: flex; align-items: center; justify-content: center;
+      }
+      .cmob-qty {
+        background: rgba(20,20,20,.9);
+        color: var(--text);
+        font-family: 'Oswald', sans-serif;
+        font-size: 14px; font-weight: 600;
+        min-width: 26px; text-align: center;
+        padding: 5px 4px;
+        border-radius: 3px;
+      }
+      .cmob-plus {
+        background: var(--red);
+        color: #fff;
+        border: none;
+        width: 30px; height: 30px;
+        font-size: 18px; font-weight: 700;
+        cursor: pointer;
+        border-radius: 4px;
+        display: flex; align-items: center; justify-content: center;
+      }
+    }
     @media (max-width: 900px) {
       .footer-inner { grid-template-columns: 1fr 1fr; }
       .about-grid { grid-template-columns: 1fr; gap: 40px; }
@@ -2196,11 +2249,13 @@ function renderProducts(){
     : `<div style="grid-column:1/-1;text-align:center;padding:80px 0;color:var(--muted);">
         <p style="font-family:'Oswald',sans-serif;letter-spacing:2px;text-transform:uppercase;font-size:14px;color:var(--muted);margin-top:60px;">No results found</p>
       </div>`;
+  renderAllMobCtrls();
 }
 
 function renderNewArrivals(){
   const list = products.filter(p=>p.badge==='new');
   document.getElementById('new-carousel').innerHTML = list.map(p=>cardHTML(p,'carousel')).join('');
+  list.forEach(p=>renderMobCtrl(p.id));
 }
 
 function cardHTML(p){
@@ -2218,6 +2273,7 @@ function cardHTML(p){
       <div class="card-overlay">
         <button class="card-add-btn" onclick="addToCart(${p.id})">+ Add to Cart</button>
       </div>
+      <div class="card-mob-ctrl" id="mob-ctrl-${p.id}"></div>
     </div>
     <div class="card-info">
       <div class="card-type">${p.type==='cd'?'CD':'Vinyl LP'}</div>
@@ -2301,6 +2357,42 @@ function removeFromCart(id){
   cart=cart.filter(x=>x.id!==id);
   updateCount();
   renderDrawer();
+  renderMobCtrl(id);
+}
+
+/* ── MOBILE QUANTITY CONTROLS ── */
+const trashSVG = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>`;
+
+function renderMobCtrl(id){
+  const el = document.getElementById('mob-ctrl-'+id);
+  if(!el) return;
+  const item = cart.find(x=>x.id===id);
+  const qty = item ? item.qty : 0;
+  if(qty===0){
+    el.innerHTML = `<button class="cmob-add" onclick="mobAdd(${id})" title="Add to Cart">+</button>`;
+  } else {
+    el.innerHTML = `
+      <button class="cmob-minus" onclick="mobMinus(${id})" title="${qty===1?'Remove':'Remove one'}">${qty===1?trashSVG:'−'}</button>
+      <span class="cmob-qty">${qty}</span>
+      <button class="cmob-plus" onclick="mobPlus(${id})" title="Add one">+</button>`;
+  }
+}
+
+function renderAllMobCtrls(){ products.forEach(p=>renderMobCtrl(p.id)); }
+
+function mobAdd(id){ addToCart(id); renderMobCtrl(id); }
+
+function mobPlus(id){
+  const ex=cart.find(x=>x.id===id);
+  if(ex){ ex.qty++; updateCount(); renderMobCtrl(id); if(document.getElementById('cart-overlay').classList.contains('open')) renderDrawer(); }
+  else mobAdd(id);
+}
+
+function mobMinus(id){
+  const ex=cart.find(x=>x.id===id);
+  if(!ex) return;
+  if(ex.qty<=1){ removeFromCart(id); }
+  else { ex.qty--; updateCount(); renderMobCtrl(id); if(document.getElementById('cart-overlay').classList.contains('open')) renderDrawer(); }
 }
 
 function renderDrawer(){
