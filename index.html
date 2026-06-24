@@ -1407,11 +1407,6 @@
       justify-content: center;
       padding: 0 3px;
     }
-    /* On mobile, move toast to top so it clears the FAB */
-    @media (hover: none) and (pointer: coarse) {
-      .toast { bottom: auto; top: 80px; transform: translateX(-50%) translateY(-80px); white-space: normal; max-width: min(320px, calc(100vw - 48px)); text-align: center; padding: 10px 16px; font-size: 12px; }
-      .toast.show { transform: translateX(-50%) translateY(0); }
-    }
 
     /* ── FORMAT PICKER MODAL ────────────────────────── */
     .fmt-overlay {
@@ -1502,6 +1497,11 @@
       pointer-events: none;
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    /* On mobile, move toast to top so it clears the FAB */
+    @media (hover: none) and (pointer: coarse) {
+      .toast { bottom: auto; top: 80px; transform: translateX(-50%) translateY(-80px); white-space: normal; max-width: min(320px, calc(100vw - 48px)); text-align: center; padding: 10px 16px; font-size: 12px; }
+      .toast.show { transform: translateX(-50%) translateY(0); }
+    }
 
     /* ── STORE GALLERY ─────────────────────────────── */
     .store-gallery {
