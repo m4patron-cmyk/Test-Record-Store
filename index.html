@@ -490,6 +490,15 @@
       background: var(--bg);
     }
     .card-art svg { width: 100%; height: 100%; display: block; }
+    .card-loading {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(0,0,0,.45);
+      font-family: 'Oswald', sans-serif;
+      font-size: 11px; letter-spacing: 2px;
+      color: var(--muted); text-transform: uppercase;
+      z-index: 2; pointer-events: none;
+    }
     .card-overlay {
       position: absolute; inset: 0;
       background: rgba(0,0,0,.5);
@@ -2117,7 +2126,7 @@ const genres = [
 
 const products = [
   {id:1, title:'Kind of Blue',artist:'Miles Davis',genre:'jazz',type:'vinyl',price:24.99,badge:'staff',c:'#0d2240',l:'#2a5a8a',localArt:'album covers/art-kind-of-blue.jpg'},
-  {id:2, title:'A Love Supreme',artist:'John Coltrane',genre:'jazz',type:'vinyl',price:29.99,badge:'rare',c:'#1d0d2e',l:'#5a3880'},
+  {id:2, title:'A Love Supreme',artist:'John Coltrane',genre:'jazz',type:'vinyl',price:29.99,badge:'rare',c:'#1d0d2e',l:'#5a3880',localArt:'album covers/art-a-love-supreme.jpg'},
   {id:3, title:'Time Out',artist:'Dave Brubeck Quartet',genre:'jazz',type:'cd',price:14.99,badge:'sale',c:'#0d2018',l:'#256842'},
   {id:4, title:'Bitches Brew',artist:'Miles Davis',genre:'jazz',type:'vinyl',price:34.99,badge:'new',c:'#241400',l:'#8a5a00'},
   {id:5, title:'Master of Puppets',artist:'Metallica',genre:'metal',type:'vinyl',price:39.99,badge:'staff',c:'#1a0000',l:'#7a0010'},
@@ -2272,6 +2281,7 @@ function cardHTML(p){
     <div class="card-art" data-pid="${p.id}">
       ${art}
       ${badge}
+      ${!p.localArt ? `<div class="card-loading" id="cl-${p.id}">Loading...</div>` : ''}
       <div class="card-overlay">
         <button class="card-add-btn" onclick="addToCart(${p.id})">+ Add to Cart</button>
       </div>
@@ -2563,7 +2573,11 @@ function injectArtwork(pid, url) {
     img.alt = '';
     img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:1;';
     img.src = url;
-    img.onload = () => artEl.insertBefore(img, artEl.firstChild);
+    img.onload = () => {
+      artEl.insertBefore(img, artEl.firstChild);
+      const loader = document.getElementById('cl-'+pid);
+      if (loader) loader.remove();
+    };
   });
 }
 
@@ -2578,6 +2592,9 @@ async function loadAllArtwork() {
     if (url) {
       p._artworkUrl = url;
       injectArtwork(p.id, url);
+    } else {
+      const loader = document.getElementById('cl-'+p.id);
+      if (loader) loader.remove();
     }
     await new Promise(r => setTimeout(r, 220));
   }
