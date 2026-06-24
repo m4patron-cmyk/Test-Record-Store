@@ -2651,6 +2651,13 @@ async function loadAllArtwork() {
   }
   // also fetch for staff picks
   for (const sp of staffPicks) {
+    const prod = products.find(p => p.id === sp.id);
+    if (prod && prod.localArt) {
+      sp._artworkUrl = prod.localArt;
+      const el = document.getElementById(`sp-art-${sp.id}`);
+      if (el) el.innerHTML = `<img src="${prod.localArt}" alt="${sp.title}" style="width:80px;height:80px;object-fit:cover;display:block;border-radius:2px;">`;
+      continue;
+    }
     const url = await fetchArtwork(sp.title, sp.artist);
     if (url) {
       sp._artworkUrl = url;
