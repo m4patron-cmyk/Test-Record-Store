@@ -1407,8 +1407,13 @@
         padding: 0 3px;
       }
       .mob-cart-fab.hidden { display: none; }
-      /* push toast up so it doesn't overlap FAB */
-      .toast { bottom: 82px; }
+      /* move toast to top so it never overlaps FAB or cart drawer */
+      .toast {
+        bottom: auto;
+        top: 80px;
+        transform: translateX(-50%) translateY(-80px);
+      }
+      .toast.show { transform: translateX(-50%) translateY(0); }
     }
 
     /* ── TOAST ─────────────────────────────────────── */
