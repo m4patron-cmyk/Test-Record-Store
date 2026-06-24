@@ -2296,14 +2296,11 @@ const products = [
   {id:40,title:'Eaten Back to Life',artist:'Cannibal Corpse',genre:'metal',type:'cd',price:13.99,badge:'rare',c:'#1a0000',l:'#8a0000',localArt:'album covers/art-eaten-back-to-life.jpg'},
   {id:41,title:'Butchered at Birth',artist:'Cannibal Corpse',genre:'metal',type:'cd',price:13.99,badge:'rare',c:'#0a0000',l:'#5a0000',localArt:'album covers/art-butchered-at-birth.jpg'},
   {id:42,title:'Tomb of the Mutilated',artist:'Cannibal Corpse',genre:'metal',type:'cd',price:13.99,badge:'rare',c:'#080808',l:'#1a1a1a',localArt:'album covers/art-tomb-of-the-mutilated.jpg'},
-  {id:43,title:'The Bleeding',artist:'Cannibal Corpse',genre:'metal',type:'cd',price:13.99,badge:'staff',c:'#1e0000',l:'#9a0000',localArt:'album covers/art-the-bleeding.jpg'},
   {id:45,title:'Gallery of Suicide',artist:'Cannibal Corpse',genre:'metal',type:'vinyl',price:29.99,badge:'',c:'#0e0000',l:'#5a0000',localArt:'album covers/art-gallery-of-suicide.jpg'},
   {id:46,title:'Bloodthirst',artist:'Cannibal Corpse',genre:'metal',type:'vinyl',price:29.99,badge:'',c:'#1a0000',l:'#7a0000',localArt:'album covers/art-bloodthirst.jpg'},
   {id:49,title:'Kill',artist:'Cannibal Corpse',genre:'metal',type:'cd',price:13.99,badge:'staff',c:'#0a0a0a',l:'#2a2a2a',localArt:'album covers/art-kill.jpg'},
-  {id:51,title:'Torture',artist:'Cannibal Corpse',genre:'metal',type:'vinyl',price:29.99,badge:'',c:'#1a0000',l:'#7a0000',localArt:'album covers/art-torture.jpg'},
   {id:52,title:'A Skeletal Domain',artist:'Cannibal Corpse',genre:'metal',type:'vinyl',price:29.99,badge:'',c:'#080808',l:'#202020',localArt:'album covers/art-a-skeletal-domain.jpg'},
   {id:53,title:'Red Before Black',artist:'Cannibal Corpse',genre:'metal',type:'vinyl',price:29.99,badge:'',c:'#1a0000',l:'#8a0000',localArt:'album covers/art-red-before-black.jpg'},
-  {id:54,title:'Violence Unimagined',artist:'Cannibal Corpse',genre:'metal',type:'vinyl',price:29.99,badge:'new',c:'#0e0606',l:'#4a1a06',localArt:'album covers/art-violence-unimagined.jpg'},
   {id:55,title:'Chaos Horrific',artist:'Cannibal Corpse',genre:'metal',type:'vinyl',price:29.99,badge:'new',c:'#0a0000',l:'#4a0000',localArt:'album covers/art-chaos-horrific.jpg'},
   {id:56,title:'Purification Through Violence',artist:'Dying Fetus',genre:'metal',type:'cd',price:13.99,badge:'rare',c:'#1a0000',l:'#8a0000',localArt:'album covers/art-purification-through-violence.jpg'},
   {id:57,title:'Killing on Adrenaline',artist:'Dying Fetus',genre:'metal',type:'cd',price:13.99,badge:'rare',c:'#0e0000',l:'#5a0000',localArt:'album covers/art-killing-on-adrenaline.jpg'},
@@ -2327,6 +2324,11 @@ const products = [
   {id:76,title:'Sonic Excess in Its Purest Form',artist:'Crowbar',genre:'metal',type:'vinyl',price:26.99,badge:'',c:'#080a08',l:'#1e281e',localArt:'album covers/art-sonic-excess.jpg'},
   {id:77,title:'Time Heals Nothing',artist:'Crowbar',genre:'metal',type:'vinyl',price:26.99,badge:'',c:'#060608',l:'#141420',localArt:'album covers/art-time-heals-nothing.jpg'},
   {id:78,title:'Odd Fellows Rest',artist:'Crowbar',genre:'metal',type:'cd',price:12.99,badge:'rare',c:'#080808',l:'#202020',localArt:'album covers/art-odd-fellows-rest.jpg'},
+  {id:79,title:'good kid, m.A.A.d city',artist:'Kendrick Lamar',genre:'rap',type:'vinyl',price:34.99,badge:'staff',c:'#060a0e',l:'#0a1a2e',localArt:'album covers/art-good-kid.jpg'},
+  {id:80,title:'Enter the Wu-Tang (36 Chambers)',artist:'Wu-Tang Clan',genre:'rap',type:'vinyl',price:36.99,badge:'rare',c:'#0a0c04',l:'#2a3008',localArt:'album covers/art-wu-tang-36.jpg'},
+  {id:81,title:'Reasonable Doubt',artist:'Jay-Z',genre:'rap',type:'vinyl',price:39.99,badge:'rare',c:'#08080e',l:'#1a1a3a',localArt:'album covers/art-reasonable-doubt.jpg'},
+  {id:82,title:'All Eyez on Me',artist:'2Pac',genre:'rap',type:'vinyl',price:44.99,badge:'new',c:'#0e0a04',l:'#3a2806',localArt:'album covers/art-all-eyez-on-me.jpg'},
+  {id:83,title:'The Marshall Mathers LP',artist:'Eminem',genre:'rap',type:'vinyl',price:32.99,badge:'staff',c:'#0a0a0a',l:'#282828',localArt:'album covers/art-marshall-mathers-lp.jpg'},
 ];
 
 const staffPicks = [
@@ -2425,7 +2427,7 @@ function renderProducts(){
     if(activeType !=='all' && p.type !==activeType && !p.hasBoth) return false;
     if(q && !p.title.toLowerCase().includes(q) && !p.artist.toLowerCase().includes(q)) return false;
     return true;
-  });
+  }).sort((a,b)=>a.artist.localeCompare(b.artist));
   document.getElementById('showing-label').textContent=`Showing ${list.length} item${list.length!==1?'s':''}`;
   document.getElementById('product-grid').innerHTML = list.length
     ? list.map(p=>cardHTML(p,'grid')).join('')
