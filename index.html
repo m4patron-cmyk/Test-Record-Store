@@ -2074,4 +2074,521 @@ const products = [
   {id:12,title:'Songs in the Key of Life',artist:'Stevie Wonder',genre:'rnb',type:'vinyl',price:44.99,badge:'new',c:'#081408',l:'#226622'},
   {id:13,title:'Off the Wall',artist:'Michael Jackson',genre:'rnb',type:'cd',price:13.99,badge:'',c:'#06060e',l:'#18185a'},
   {id:14,title:'The Chronic',artist:'Dr. Dre',genre:'rap',type:'vinyl',price:36.99,badge:'staff',c:'#060e06',l:'#124a12'},
-  {id:15,title:'Illmatic',artist:'Nas',genre:'rap'
+  {id:15,title:'Illmatic',artist:'Nas',genre:'rap',type:'vinyl',price:29.99,badge:'rare',c:'#0a0a06',l:'#3a3a0a'},
+  {id:16,title:'Ready to Die',artist:'The Notorious B.I.G.',genre:'rap',type:'vinyl',price:34.99,badge:'new',c:'#080808',l:'#282828'},
+  {id:17,title:'Madvillainy',artist:'MF DOOM & Madlib',genre:'rap',type:'vinyl',price:39.99,badge:'sale',c:'#0e0606',l:'#5a1a06'},
+  {id:18,title:'Abbey Road',artist:'The Beatles',genre:'rock',type:'vinyl',price:32.99,badge:'staff',c:'#0e0e0e',l:'#444'},
+  {id:19,title:'Led Zeppelin IV',artist:'Led Zeppelin',genre:'rock',type:'vinyl',price:34.99,badge:'rare',c:'#0e0606',l:'#6a1a06'},
+  {id:20,title:'Rumours',artist:'Fleetwood Mac',genre:'rock',type:'vinyl',price:28.99,badge:'new',c:'#06101a',l:'#1a4a6a'},
+  {id:21,title:'Dark Side of the Moon',artist:'Pink Floyd',genre:'rock',type:'vinyl',price:36.99,badge:'sale',c:'#04040a',l:'#14142a'},
+  {id:22,title:'Thriller',artist:'Michael Jackson',genre:'pop',type:'vinyl',price:29.99,badge:'',c:'#060606',l:'#222'},
+  {id:23,title:'1989',artist:'Taylor Swift',genre:'pop',type:'vinyl',price:32.99,badge:'new',c:'#0a0a12',l:'#303060'},
+  {id:24,title:'Coat of Many Colors',artist:'Dolly Parton',genre:'country',type:'vinyl',price:26.99,badge:'',c:'#0e0806',l:'#5a2a06'},
+  {id:25,title:'At Folsom Prison',artist:'Johnny Cash',genre:'country',type:'vinyl',price:28.99,badge:'staff',c:'#040404',l:'#181818'},
+  {id:26,title:'Random Access Memories',artist:'Daft Punk',genre:'electronic',type:'vinyl',price:44.99,badge:'new',c:'#0e0c00',l:'#4a4000'},
+  {id:27,title:'Homework',artist:'Daft Punk',genre:'electronic',type:'vinyl',price:36.99,badge:'',c:'#06060e',l:'#20206a'},
+  {id:28,title:'The Thrill Is Gone',artist:'B.B. King',genre:'blues',type:'vinyl',price:24.99,badge:'',c:'#06060e',l:'#12124a'},
+  {id:29,title:'Exodus',artist:'Bob Marley & The Wailers',genre:'reggae',type:'vinyl',price:26.99,badge:'staff',c:'#060e06',l:'#124a12'},
+  {id:30,title:'Never Mind the Bollocks',artist:'Sex Pistols',genre:'punk',type:'vinyl',price:26.99,badge:'new',c:'#0e0000',l:'#6a0000'},
+  {id:31,title:'The Four Seasons',artist:'Vivaldi / I. Perlman',genre:'classical',type:'vinyl',price:22.99,badge:'rare',c:'#0e0c00',l:'#4a3a00'},
+];
+
+const staffPicks = [
+  {id:1, title:'Kind of Blue',artist:'Miles Davis',quote:'"Absolute masterpiece. Play it on vinyl and you\'ll hear details you never noticed before."',by:'Alex, Floor Manager',price:24.99,c:'#0d2240',l:'#2a5a8a'},
+  {id:14,title:'The Chronic',artist:'Dr. Dre',quote:'"The production on this is still unmatched 30 years later. A must-own on wax."',by:'Marcus, Vinyl Specialist',price:36.99,c:'#060e06',l:'#124a12'},
+  {id:25,title:'At Folsom Prison',artist:'Johnny Cash',quote:'"Nothing hits like Johnny performing for actual inmates. The energy is electric."',by:'Dana, CD Curator',price:28.99,c:'#040404',l:'#181818'},
+  {id:26,title:'Random Access Memories',artist:'Daft Punk',quote:'"Audiophile-grade production that shows off any record player. One of the best sounding LPs ever pressed."',by:'Toni, Electronics Buyer',price:44.99,c:'#0e0c00',l:'#4a4000'},
+];
+
+const nowPlaying = [
+  'Kind of Blue — Miles Davis',
+  'Master of Puppets — Metallica',
+  "What's Going On — Marvin Gaye",
+  'Illmatic — Nas',
+  'Abbey Road — The Beatles',
+  'Exodus — Bob Marley',
+  'Random Access Memories — Daft Punk',
+  'Dark Side of the Moon — Pink Floyd',
+];
+
+/* ─── STATE ─────────────────────────────────────────── */
+let cart = [];
+let activeGenre = 'all';
+let activeType  = 'all';
+
+/* ─── SVG HELPERS ───────────────────────────────────── */
+function vinylSVG(c,l,size=200){
+  return `<svg width="${size}" height="${size}" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <rect width="200" height="200" fill="${c}"/>
+    <circle cx="100" cy="100" r="96" fill="${c}"/>
+    <circle cx="100" cy="100" r="88" fill="none" stroke="rgba(255,255,255,.04)" stroke-width="2"/>
+    <circle cx="100" cy="100" r="76" fill="none" stroke="rgba(255,255,255,.04)" stroke-width="2"/>
+    <circle cx="100" cy="100" r="64" fill="none" stroke="rgba(255,255,255,.04)" stroke-width="2"/>
+    <circle cx="100" cy="100" r="52" fill="none" stroke="rgba(255,255,255,.04)" stroke-width="2"/>
+    <circle cx="100" cy="100" r="40" fill="none" stroke="rgba(255,255,255,.04)" stroke-width="2"/>
+    <circle cx="100" cy="100" r="34" fill="${l}"/>
+    <circle cx="100" cy="100" r="7"  fill="${c}"/>
+  </svg>`;
+}
+
+function cdSVG(size=200){
+  return `<svg width="${size}" height="${size}" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="cdg${size}" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"   stop-color="#d0d8e8"/>
+        <stop offset="30%"  stop-color="#b0b8d0"/>
+        <stop offset="55%"  stop-color="#c8b0b0"/>
+        <stop offset="75%"  stop-color="#b0c8b0"/>
+        <stop offset="100%" stop-color="#a8a8c8"/>
+      </radialGradient>
+    </defs>
+    <rect width="200" height="200" fill="#111"/>
+    <circle cx="100" cy="100" r="95" fill="url(#cdg${size})"/>
+    <circle cx="100" cy="100" r="30" fill="rgba(255,255,255,.4)" stroke="rgba(0,0,0,.1)" stroke-width="1"/>
+    <circle cx="100" cy="100" r="10" fill="#bbb"/>
+    <circle cx="100" cy="100" r="4"  fill="#888"/>
+  </svg>`;
+}
+
+/* ─── INIT GENRE DROPDOWN ───────────────────────────── */
+function initGenreDropdown(){
+  const menu = document.getElementById('genre-dropdown-menu');
+  if(!menu) return;
+  const saleCnt = products.filter(p=>p.badge==='sale').length;
+  const rareCnt = products.filter(p=>p.badge==='rare').length;
+  const special = [
+    `<a href="#products" onclick="event.preventDefault();setGenre('sale')">On Sale (${saleCnt})</a>`,
+    `<a href="#products" onclick="event.preventDefault();setGenre('rare')">Rare (${rareCnt})</a>`,
+  ].join('');
+  menu.innerHTML = special + genres.map(g=>
+    `<a href="#products" onclick="event.preventDefault();setGenre('${g.id}')">${g.name}</a>`
+  ).join('');
+}
+
+/* ─── GENRE CHIPS ───────────────────────────────────── */
+function renderGenreChips(){
+  const el = document.getElementById('genre-chips');
+  const saleCnt = products.filter(p=>p.badge==='sale').length;
+  const rareCnt = products.filter(p=>p.badge==='rare').length;
+  const allChip = `<button class="genre-chip ${activeGenre==='all'?'active':''}" onclick="setGenre('all')">All (${products.length})</button>`;
+  const saleChip = `<button class="genre-chip sale-chip ${activeGenre==='sale'?'active':''}" onclick="setGenre('sale')">On Sale (${saleCnt})</button>`;
+  const rareChip = `<button class="genre-chip rare-chip ${activeGenre==='rare'?'active':''}" onclick="setGenre('rare')">Rare (${rareCnt})</button>`;
+  el.innerHTML = allChip + saleChip + rareChip + genres.map(g=>{
+    const cnt = products.filter(p=>p.genre===g.id).length;
+    return `<button class="genre-chip ${activeGenre===g.id?'active':''}" onclick="setGenre('${g.id}')">${g.name} (${cnt})</button>`;
+  }).join('');
+}
+
+/* ─── PRODUCTS ──────────────────────────────────────── */
+function renderProducts(){
+  const q = (document.getElementById('search-input')?.value||'').toLowerCase();
+  let list = products.filter(p=>{
+    if(activeGenre==='sale' && p.badge!=='sale') return false;
+    if(activeGenre==='rare' && p.badge!=='rare') return false;
+    if(activeGenre!=='all' && activeGenre!=='sale' && activeGenre!=='rare' && p.genre!==activeGenre) return false;
+    if(activeType !=='all' && p.type !==activeType)  return false;
+    if(q && !p.title.toLowerCase().includes(q) && !p.artist.toLowerCase().includes(q)) return false;
+    return true;
+  });
+  document.getElementById('showing-label').textContent=`Showing ${list.length} item${list.length!==1?'s':''}`;
+  document.getElementById('product-grid').innerHTML = list.length
+    ? list.map(p=>cardHTML(p,'grid')).join('')
+    : `<div style="grid-column:1/-1;text-align:center;padding:80px 0;color:var(--muted);">
+        <div style="font-size:48px;margin-bottom:16px;">🎵</div>
+        <p style="font-family:'Oswald',sans-serif;letter-spacing:2px;text-transform:uppercase;font-size:14px;">No results found</p>
+      </div>`;
+}
+
+function renderNewArrivals(){
+  const list = products.filter(p=>p.badge==='new');
+  document.getElementById('new-carousel').innerHTML = list.map(p=>cardHTML(p,'carousel')).join('');
+}
+
+function cardHTML(p){
+  const art = p._artworkUrl
+    ? `<img src="${p._artworkUrl}" alt="${p.title}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:1;">`
+    : (p.type==='cd' ? cdSVG(220) : vinylSVG(p.c,p.l,220));
+  const badgeMap = {new:'badge-new',sale:'badge-sale',staff:'badge-staff',rare:'badge-rare'};
+  const badgeLbl = {new:'New',sale:'Sale',staff:'⭐ Staff Pick',rare:'Rare'};
+  const badge = p.badge ? `<div class="card-badge ${badgeMap[p.badge]}">${badgeLbl[p.badge]}</div>` : '';
+  const genre = genres.find(g=>g.id===p.genre)?.name||p.genre;
+  return `<div class="product-card">
+    <div class="card-art" data-pid="${p.id}">
+      ${art}
+      ${badge}
+      <div class="card-overlay">
+        <button class="card-add-btn" onclick="addToCart(${p.id})">+ Add to Cart</button>
+      </div>
+    </div>
+    <div class="card-info">
+      <div class="card-type">${p.type==='cd'?'CD':'Vinyl LP'}</div>
+      <div class="card-artist">${p.artist}</div>
+      <div class="card-title">${p.title}</div>
+      <div class="card-footer">
+        <span class="card-price">$${p.price.toFixed(2)}</span>
+        <span class="card-genre-tag">${genre}</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+function staffArtHTML(sp){
+  if(sp._artworkUrl) return `<img src="${sp._artworkUrl}" alt="${sp.title}" style="width:80px;height:80px;object-fit:cover;display:block;border-radius:2px;">`;
+  return vinylSVG(sp.c,sp.l,80);
+}
+
+function renderStaffPicks(){
+  document.getElementById('staff-grid').innerHTML = staffPicks.map(sp=>`
+    <div class="staff-card">
+      <div class="staff-art" id="sp-art-${sp.id}">${staffArtHTML(sp)}</div>
+      <div class="staff-body">
+        <div class="staff-artist">${sp.artist}</div>
+        <div class="staff-title">${sp.title}</div>
+        <div class="staff-quote">${sp.quote}</div>
+        <div class="staff-pick-by">— ${sp.by}</div>
+        <div class="staff-price">$${sp.price.toFixed(2)}</div>
+        <button class="staff-add" onclick="addToCart(${sp.id})">+ Add to Cart</button>
+      </div>
+    </div>`).join('');
+}
+
+/* ─── GENRE / TYPE FILTER ───────────────────────────── */
+function setGenre(id){
+  activeGenre = id;
+  renderGenreChips();
+  renderProducts();
+  document.getElementById('products-h').textContent =
+    id==='all' ? 'All Records & CDs' : id==='sale' ? 'On Sale' : id==='rare' ? 'Rare Finds' : (genres.find(g=>g.id===id)?.name || id);
+  document.getElementById('products').scrollIntoView({behavior:'smooth'});
+}
+
+function setType(t,btn){
+  activeType=t;
+  document.querySelectorAll('.type-pill').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProducts();
+}
+
+/* ─── CAROUSEL ──────────────────────────────────────── */
+function scrollCarousel(id,dir){
+  const el = document.getElementById(id);
+  el.scrollBy({left: dir*240, behavior:'smooth'});
+}
+
+/* ─── CART ──────────────────────────────────────────── */
+function addToCart(id){
+  const p = products.find(x=>x.id===id);
+  if(!p) return;
+  const ex = cart.find(x=>x.id===id);
+  if(ex) ex.qty++;
+  else cart.push({...p,qty:1});
+  updateCount();
+  showToast(`"${p.title}" added to cart`);
+}
+
+function updateCount(){
+  const n = cart.reduce((s,x)=>s+x.qty,0);
+  document.getElementById('cart-count').textContent=n;
+}
+
+function openCart(){
+  renderDrawer();
+  document.getElementById('cart-overlay').classList.add('open');
+}
+function closeCart(){ document.getElementById('cart-overlay').classList.remove('open'); }
+function overlayClick(e){ if(e.target.id==='cart-overlay') closeCart(); }
+
+function removeFromCart(id){
+  cart=cart.filter(x=>x.id!==id);
+  updateCount();
+  renderDrawer();
+}
+
+function renderDrawer(){
+  const body = document.getElementById('drawer-body');
+  const foot = document.getElementById('drawer-foot');
+  if(cart.length===0){
+    body.innerHTML=`<div class="drawer-empty"><span class="ei">🎵</span><p>Your cart is empty</p></div>`;
+    foot.style.display='none';
+    return;
+  }
+  const total = cart.reduce((s,x)=>s+x.price*x.qty,0);
+  body.innerHTML = cart.map(item=>`
+    <div class="drawer-item">
+      <div>${item.type==='cd'?cdSVG(56):vinylSVG(item.c,item.l,56)}</div>
+      <div class="drawer-item-info">
+        <div class="di-artist">${item.artist}</div>
+        <div class="di-title">${item.title}</div>
+        <div class="di-meta">${item.type==='cd'?'CD':'Vinyl'} × ${item.qty}</div>
+        <div class="di-price">$${(item.price*item.qty).toFixed(2)}</div>
+      </div>
+      <button class="di-remove" onclick="removeFromCart(${item.id})" title="Remove">✕</button>
+    </div>`).join('');
+  document.getElementById('drawer-total').textContent=`$${total.toFixed(2)}`;
+  foot.style.display='block';
+}
+
+function checkout(){
+  if(!cart.length) return;
+  cart=[];
+  updateCount();
+  closeCart();
+  showToast('Thanks! (Demo — no real purchase made) 🎉');
+}
+
+/* ─── UTILS ─────────────────────────────────────────── */
+function copyEmail(){
+  navigator.clipboard.writeText('info@shellshockrecords.com').then(()=>showToast('Email copied ✓'));
+}
+
+function openContactModal(e){
+  if(e) e.preventDefault();
+  document.getElementById('contact-modal-overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeContactModal(){
+  document.getElementById('contact-modal-overlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+function contactOverlayClick(e){
+  if(e.target===document.getElementById('contact-modal-overlay')) closeContactModal();
+}
+function copyContactEmail(btn){
+  navigator.clipboard.writeText('info@shellshockrecords.com').then(()=>{
+    const orig=btn.textContent;
+    btn.textContent='Copied ✓';
+    setTimeout(()=>btn.textContent=orig, 2000);
+  });
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+function handleNews(e){
+  e.preventDefault();
+  showToast('Subscribed! (Demo) 🎵');
+  e.target.reset();
+}
+
+/* ─── TODAY'S HOURS ─────────────────────────────────── */
+function toggleMobileMenu(){
+  const menu = document.getElementById('mobile-menu');
+  const btn  = document.getElementById('hamburger');
+  const open = menu.classList.toggle('open');
+  btn.classList.toggle('open', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+  // populate genre links once
+  const mg = document.getElementById('mob-genres');
+  if(open && mg && !mg.children.length){
+    const saleCnt = products.filter(p=>p.badge==='sale').length;
+    const rareCnt = products.filter(p=>p.badge==='rare').length;
+    mg.innerHTML =
+      `<a onclick="setGenre('sale');toggleMobileMenu()">On Sale (${saleCnt})</a>` +
+      `<a onclick="setGenre('rare');toggleMobileMenu()">Rare (${rareCnt})</a>` +
+      genres.map(g=>`<a onclick="setGenre('${g.id}');toggleMobileMenu()">${g.name}</a>`).join('');
+  }
+}
+
+function logoErr(img){
+  if(!img._triedJpg){
+    img._triedJpg = true;
+    img.src = 'store-logo.jpg';
+  } else {
+    img.style.display = 'none';
+    document.getElementById('logo-svg-fb').style.display = 'block';
+  }
+}
+
+function heroLogoErr(img){
+  if(!img._triedPng){
+    img._triedPng = true;
+    img.src = 'store-logo.png';
+  } else {
+    // Swap to SVG clone so hero still looks great without the image file
+    img.style.display = 'none';
+    const src = document.getElementById('logo-svg-fb');
+    if(src){
+      const clone = src.cloneNode(true);
+      clone.removeAttribute('id');
+      clone.style.cssText = 'display:block;width:100%;height:100%;';
+      img.parentNode.appendChild(clone);
+    }
+  }
+}
+
+function highlightToday(){
+  const d = new Date().getDay();
+  const map = {1:'h-mon',4:'h-thu',5:'h-fri',6:'h-sat',0:'h-sun'};
+  const ctmap = {1:'ct-mon',4:'ct-thu',5:'ct-fri',6:'ct-sat',0:'ct-sun'};
+  if(map[d]){
+    document.getElementById(map[d])?.classList.add('today-h');
+    document.getElementById(ctmap[d])?.classList.add('row-today');
+  }
+}
+
+/* ─── NOW PLAYING ───────────────────────────────────── */
+let npIdx=0;
+setInterval(()=>{
+  npIdx=(npIdx+1)%nowPlaying.length;
+  const el=document.getElementById('np-track');
+  if(el){el.style.opacity=0;setTimeout(()=>{el.textContent=nowPlaying[npIdx];el.style.opacity=1;},400);}
+},7000);
+document.getElementById('np-track').style.transition='opacity .4s';
+
+/* ─── SMOOTH NAV ─────────────────────────────────────── */
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const id=a.getAttribute('href').slice(1);
+    const el=document.getElementById(id);
+    if(el){e.preventDefault();el.scrollIntoView({behavior:'smooth'});}
+  });
+});
+
+/* ─── ALBUM ARTWORK (iTunes Search API) ─────────────── */
+async function fetchArtwork(title, artist) {
+  try {
+    const q = encodeURIComponent(`${title} ${artist}`);
+    const res = await fetch(`https://itunes.apple.com/search?term=${q}&media=music&entity=album&limit=5`);
+    const data = await res.json();
+    if (data.results?.length > 0) {
+      const url = data.results[0].artworkUrl100;
+      if (url) return url.replace(/\d+x\d+bb/, '600x600bb');
+    }
+  } catch(e) {}
+  return null;
+}
+
+function injectArtwork(pid, url) {
+  document.querySelectorAll(`.card-art[data-pid="${pid}"]`).forEach(artEl => {
+    // Don't re-inject if img already there
+    if (artEl.querySelector('img')) return;
+    const img = new Image();
+    img.alt = '';
+    img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:1;';
+    img.src = url;
+    img.onload = () => artEl.insertBefore(img, artEl.firstChild);
+  });
+}
+
+async function loadAllArtwork() {
+  for (const p of products) {
+    const url = await fetchArtwork(p.artSearch || p.title, p.artist);
+    if (url) {
+      p._artworkUrl = url;
+      injectArtwork(p.id, url);
+    }
+    await new Promise(r => setTimeout(r, 140));
+  }
+  // also fetch for staff picks
+  for (const sp of staffPicks) {
+    const url = await fetchArtwork(sp.title, sp.artist);
+    if (url) {
+      sp._artworkUrl = url;
+      const el = document.getElementById(`sp-art-${sp.id}`);
+      if (el) el.innerHTML = `<img src="${url}" alt="${sp.title}" style="width:80px;height:80px;object-fit:cover;display:block;border-radius:2px;">`;
+    }
+    await new Promise(r => setTimeout(r, 140));
+  }
+}
+
+/* ─── EVENTS ─────────────────────────────────────────── */
+const events = [
+  {
+    month:'Jul', day:'12', dow:'Sat',
+    type:'Live Performance',
+    title:'The Vinyl Sessions: Jazz Night',
+    desc:'Local jazz trio plays live on the shop floor. Grab a record, grab a drink, and enjoy the sounds. Free entry.',
+    time:'7:00 PM', admission:'Free'
+  },
+  {
+    month:'Jul', day:'19', dow:'Sat',
+    type:'Listening Party',
+    title:'New Releases Listening Party',
+    desc:'We spin the hottest new arrivals of the month front to back. First come, first served. Limited space.',
+    time:'6:00 PM', admission:'Free'
+  },
+  {
+    month:'Jul', day:'26', dow:'Sat',
+    type:'In-Store Signing',
+    title:'Local Artist Meet & Greet',
+    desc:'South Florida hip-hop artist stops in to sign copies of their new record. Exclusive limited pressings available.',
+    time:'3:00 PM', admission:'Free'
+  },
+  {
+    month:'Aug', day:'2', dow:'Sat',
+    type:'Crate Dig',
+    title:'Summer Crate Dig & Sale',
+    desc:'Over 500 records marked down for one day only. Dig through new and used stock — rare finds guaranteed.',
+    time:'11:00 AM', admission:'Free'
+  },
+  {
+    month:'Aug', day:'9', dow:'Sat',
+    type:'Listening Party',
+    title:'Classic Albums: Dark Side of the Moon',
+    desc:'50th anniversary full-album listen on our audiophile setup. Limited to 20 attendees. RSVP required.',
+    time:'7:00 PM', admission:'Free · RSVP'
+  },
+  {
+    month:'Aug', day:'23', dow:'Sat',
+    type:'Live Performance',
+    title:'Blues on Wax: Live Blues Night',
+    desc:'Two sets of live blues from Fort Lauderdale\'s best. Vinyl specials on blues records all night.',
+    time:'6:30 PM', admission:'Free'
+  },
+];
+
+function renderEvents(){
+  const grid = document.getElementById('events-grid');
+  if(!grid) return;
+  if(!events.length){
+    grid.innerHTML = `<div class="events-empty">No upcoming events — check back soon.</div>`;
+    return;
+  }
+  grid.innerHTML = events.map(e=>`
+    <div class="event-card">
+      <div class="event-date-block">
+        <div class="event-month">${e.month}</div>
+        <div class="event-day">${e.day}</div>
+        <div class="event-dow">${e.dow}</div>
+      </div>
+      <div class="event-body">
+        <div class="event-type">${e.type}</div>
+        <div class="event-title">${e.title}</div>
+        <div class="event-desc">${e.desc}</div>
+        <div class="event-meta">
+          <span>⏰ <strong>${e.time}</strong></span>
+          <span>🎟 <strong>${e.admission}</strong></span>
+        </div>
+        <a class="event-rsvp" onclick="showToast('RSVP coming soon! Call us at 754-227-8300')">RSVP / Learn More →</a>
+      </div>
+    </div>`).join('');
+}
+
+/* ─── BOOT ───────────────────────────────────────────── */
+initGenreDropdown();
+renderGenreChips();
+renderProducts();
+renderNewArrivals();
+renderStaffPicks();
+renderEvents();
+
+// Hero logo: inject SVG as base layer so it always shows (image overlays when available)
+(function(){
+  const wrap = document.getElementById('hero-logo-wrap');
+  const svgSrc = document.getElementById('logo-svg-fb');
+  if(wrap && svgSrc){
+    const clone = svgSrc.cloneNode(true);
+    clone.removeAttribute('id');
+    clone.style.cssText = 'width:100%;height:100%;display:block;';
+    wrap.insertBefore(clone, wrap.firstChild);
+  }
+})();
+highlightToday();
+loadAllArtwork();
+</script>
+</body>
+</html>
