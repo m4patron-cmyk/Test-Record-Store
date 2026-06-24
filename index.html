@@ -2225,8 +2225,8 @@
     <div class="fmt-modal-title" id="fmt-modal-title"></div>
     <div class="fmt-modal-artist" id="fmt-modal-artist"></div>
     <div class="fmt-btns">
-      <button class="fmt-btn" onclick="selectFmt('vinyl')">Vinyl LP</button>
-      <button class="fmt-btn" onclick="selectFmt('cd')">CD</button>
+      <button class="fmt-btn" id="fmt-btn-vinyl" onclick="selectFmt('vinyl')">Vinyl LP</button>
+      <button class="fmt-btn" id="fmt-btn-cd" onclick="selectFmt('cd')">CD</button>
     </div>
     <button class="fmt-cancel" onclick="closeFmtModal()">Cancel</button>
   </div>
@@ -2261,21 +2261,21 @@ const products = [
   {id:4, title:'Bitches Brew',artist:'Miles Davis',genre:'jazz',type:'vinyl',price:34.99,badge:'new',c:'#241400',l:'#8a5a00',localArt:'album covers/art-bitches-brew.jpg'},
   {id:5, title:'Master of Puppets',artist:'Metallica',genre:'metal',type:'vinyl',price:39.99,badge:'staff',c:'#1a0000',l:'#7a0010',localArt:'album covers/art-master-of-puppets.jpg'},
   {id:6, title:'Black Sabbath',artist:'Black Sabbath',genre:'metal',type:'vinyl',price:34.99,badge:'',c:'#0a0a0a',l:'#333',localArt:'album covers/art-black-sabbath.jpg'},
-  {id:7, title:'Paranoid',artist:'Black Sabbath',genre:'metal',type:'vinyl',hasBoth:true,price:32.99,badge:'new',c:'#060618',l:'#20207a',localArt:'album covers/art-paranoid.jpg'},
+  {id:7, title:'Paranoid',artist:'Black Sabbath',genre:'metal',type:'vinyl',hasBoth:true,price:32.99,priceVinyl:32.99,priceCd:13.99,badge:'new',c:'#060618',l:'#20207a',localArt:'album covers/art-paranoid.jpg'},
   {id:9, title:'Reign in Blood',artist:'Slayer',genre:'metal',type:'vinyl',price:29.99,badge:'rare',c:'#1e0000',l:'#7a0000',localArt:'album covers/art-reign-in-blood.jpg'},
   {id:10,title:"What's Going On",artist:'Marvin Gaye',genre:'rnb',type:'vinyl',price:27.99,badge:'staff',c:'#120822',l:'#4a1e7a',localArt:'album covers/art-whats-going-on.jpg'},
-  {id:11,title:'Purple Rain',artist:'Prince',genre:'rnb',type:'vinyl',hasBoth:true,price:32.99,badge:'',c:'#0e0022',l:'#5500aa',localArt:'album covers/art-purple-rain.jpg'},
+  {id:11,title:'Purple Rain',artist:'Prince',genre:'rnb',type:'vinyl',hasBoth:true,price:32.99,priceVinyl:32.99,priceCd:13.99,badge:'',c:'#0e0022',l:'#5500aa',localArt:'album covers/art-purple-rain.jpg'},
   {id:12,title:'Songs in the Key of Life',artist:'Stevie Wonder',genre:'rnb',type:'vinyl',price:44.99,badge:'new',c:'#081408',l:'#226622',localArt:'album covers/art-songs-in-the-key.jpg'},
   {id:13,title:'Off the Wall',artist:'Michael Jackson',genre:'rnb',type:'cd',price:13.99,badge:'',c:'#06060e',l:'#18185a',localArt:'album covers/art-off-the-wall.jpg'},
   {id:14,title:'The Chronic',artist:'Dr. Dre',genre:'rap',type:'vinyl',price:36.99,badge:'staff',c:'#060e06',l:'#124a12',localArt:'album covers/art-the-chronic.jpg'},
-  {id:15,title:'Illmatic',artist:'Nas',genre:'rap',type:'vinyl',hasBoth:true,price:29.99,badge:'rare',c:'#0a0a06',l:'#3a3a0a',localArt:'album covers/art-illmatic.jpg'},
+  {id:15,title:'Illmatic',artist:'Nas',genre:'rap',type:'vinyl',hasBoth:true,price:29.99,priceVinyl:29.99,priceCd:12.99,badge:'rare',c:'#0a0a06',l:'#3a3a0a',localArt:'album covers/art-illmatic.jpg'},
   {id:16,title:'Ready to Die',artist:'The Notorious B.I.G.',genre:'rap',type:'vinyl',price:34.99,badge:'new',c:'#080808',l:'#282828',localArt:'album covers/art-ready-to-die.jpg'},
   {id:17,title:'Madvillainy',artist:'MF DOOM & Madlib',genre:'rap',type:'vinyl',price:39.99,badge:'sale',c:'#0e0606',l:'#5a1a06',localArt:'album covers/art-madvillainy.jpg'},
-  {id:18,title:'Abbey Road',artist:'The Beatles',genre:'rock',type:'vinyl',hasBoth:true,price:32.99,badge:'staff',c:'#0e0e0e',l:'#444',localArt:'album covers/art-abbey-road.jpg'},
+  {id:18,title:'Abbey Road',artist:'The Beatles',genre:'rock',type:'vinyl',hasBoth:true,price:32.99,priceVinyl:32.99,priceCd:14.99,badge:'staff',c:'#0e0e0e',l:'#444',localArt:'album covers/art-abbey-road.jpg'},
   {id:19,title:'Led Zeppelin IV',artist:'Led Zeppelin',genre:'rock',type:'vinyl',price:34.99,badge:'rare',c:'#0e0606',l:'#6a1a06',localArt:'album covers/art-led-zeppelin-iv.jpg'},
   {id:20,title:'Rumours',artist:'Fleetwood Mac',genre:'rock',type:'vinyl',price:28.99,badge:'new',c:'#06101a',l:'#1a4a6a',localArt:'album covers/art-rumours.jpg'},
-  {id:21,title:'Dark Side of the Moon',artist:'Pink Floyd',genre:'rock',type:'vinyl',hasBoth:true,price:36.99,badge:'sale',c:'#04040a',l:'#14142a',localArt:'album covers/art-dark-side.jpg'},
-  {id:22,title:'Thriller',artist:'Michael Jackson',genre:'pop',type:'vinyl',hasBoth:true,price:29.99,badge:'',c:'#060606',l:'#222',localArt:'album covers/art-thriller.jpg'},
+  {id:21,title:'Dark Side of the Moon',artist:'Pink Floyd',genre:'rock',type:'vinyl',hasBoth:true,price:36.99,priceVinyl:36.99,priceCd:14.99,badge:'sale',c:'#04040a',l:'#14142a',localArt:'album covers/art-dark-side.jpg'},
+  {id:22,title:'Thriller',artist:'Michael Jackson',genre:'pop',type:'vinyl',hasBoth:true,price:29.99,priceVinyl:29.99,priceCd:13.99,badge:'',c:'#060606',l:'#222',localArt:'album covers/art-thriller.jpg'},
   {id:23,title:'1989',artist:'Taylor Swift',genre:'pop',type:'vinyl',price:32.99,badge:'new',c:'#0a0a12',l:'#303060',localArt:'album covers/art-1989.jpg'},
   {id:24,title:'Coat of Many Colors',artist:'Dolly Parton',genre:'country',type:'vinyl',price:26.99,badge:'',c:'#0e0806',l:'#5a2a06',localArt:'album covers/art-coat-of-many-colors.jpg'},
   {id:25,title:'At Folsom Prison',artist:'Johnny Cash',genre:'country',type:'vinyl',price:28.99,badge:'staff',c:'#040404',l:'#181818',localArt:'album covers/art-at-folsom-prison.jpg'},
@@ -2288,9 +2288,9 @@ const products = [
   {id:32,title:'Scream Bloody Gore',artist:'Death',genre:'metal',type:'cd',price:13.99,badge:'rare',c:'#1a0000',l:'#8a0000',localArt:'album covers/art-scream-bloody-gore.jpg'},
   {id:33,title:'Leprosy',artist:'Death',genre:'metal',type:'cd',price:13.99,badge:'rare',c:'#0a0800',l:'#3a2800',localArt:'album covers/art-leprosy.jpg'},
   {id:34,title:'Spiritual Healing',artist:'Death',genre:'metal',type:'vinyl',price:29.99,badge:'',c:'#080e08',l:'#1a3a1a',localArt:'album covers/art-spiritual-healing.jpg'},
-  {id:35,title:'Human',artist:'Death',genre:'metal',type:'vinyl',hasBoth:true,price:36.99,badge:'staff',c:'#060a10',l:'#182040',localArt:'album covers/art-human.jpg'},
+  {id:35,title:'Human',artist:'Death',genre:'metal',type:'vinyl',hasBoth:true,price:36.99,priceVinyl:36.99,priceCd:14.99,badge:'staff',c:'#060a10',l:'#182040',localArt:'album covers/art-human.jpg'},
   {id:36,title:'Individual Thought Patterns',artist:'Death',genre:'metal',type:'vinyl',price:32.99,badge:'',c:'#0e0806',l:'#4a2806',localArt:'album covers/art-individual-thought.jpg'},
-  {id:37,title:'Symbolic',artist:'Death',genre:'metal',type:'vinyl',hasBoth:true,price:34.99,badge:'staff',c:'#0a0a0a',l:'#2a2a2a',localArt:'album covers/art-symbolic.jpg'},
+  {id:37,title:'Symbolic',artist:'Death',genre:'metal',type:'vinyl',hasBoth:true,price:34.99,priceVinyl:34.99,priceCd:13.99,badge:'staff',c:'#0a0a0a',l:'#2a2a2a',localArt:'album covers/art-symbolic.jpg'},
   {id:38,title:'The Sound of Perseverance',artist:'Death',genre:'metal',type:'cd',price:13.99,badge:'new',c:'#080808',l:'#202020',localArt:'album covers/art-sound-of-perseverance.jpg'},
   {id:39,title:'Hymns from the Apocrypha',artist:'Suffocation',genre:'metal',type:'vinyl',price:29.99,badge:'new',c:'#0e0606',l:'#4a1206',localArt:'album covers/art-hymns-from.jpg'},
   {id:40,title:'Eaten Back to Life',artist:'Cannibal Corpse',genre:'metal',type:'cd',price:13.99,badge:'rare',c:'#1a0000',l:'#8a0000',localArt:'album covers/art-eaten-back-to-life.jpg'},
@@ -2315,11 +2315,11 @@ const products = [
   {id:64,title:'Make Them Beg for Death',artist:'Dying Fetus',genre:'metal',type:'cd',price:13.99,badge:'new',c:'#1a0000',l:'#7a0000',localArt:'album covers/art-make-them-beg-for-death.jpg'},
   {id:65,title:'Master of Reality',artist:'Black Sabbath',genre:'metal',type:'cd',price:13.99,badge:'rare',c:'#080a00',l:'#1e2800',localArt:'album covers/art-master-of-reality.jpg'},
   {id:66,title:'Black Sabbath, Vol. 4',artist:'Black Sabbath',genre:'metal',type:'cd',price:13.99,badge:'rare',c:'#0a0000',l:'#3a0000',localArt:'album covers/art-vol-4.jpg'},
-  {id:67,title:'Sabbath Bloody Sabbath',artist:'Black Sabbath',genre:'metal',type:'vinyl',hasBoth:true,price:32.99,badge:'staff',c:'#0e0808',l:'#3a1818',localArt:'album covers/art-sabbath-bloody-sabbath.jpg'},
+  {id:67,title:'Sabbath Bloody Sabbath',artist:'Black Sabbath',genre:'metal',type:'vinyl',hasBoth:true,price:32.99,priceVinyl:32.99,priceCd:13.99,badge:'staff',c:'#0e0808',l:'#3a1818',localArt:'album covers/art-sabbath-bloody-sabbath.jpg'},
   {id:68,title:'Heaven and Hell',artist:'Black Sabbath',genre:'metal',type:'vinyl',price:32.99,badge:'staff',c:'#060610',l:'#1a1a40',localArt:'album covers/art-heaven-and-hell.jpg'},
   {id:69,title:'Sonic Brew',artist:'Black Label Society',genre:'metal',type:'vinyl',price:28.99,badge:'rare',c:'#0a0400',l:'#3a1800',localArt:'album covers/art-sonic-brew.jpg'},
   {id:70,title:'Stronger Than Death',artist:'Black Label Society',genre:'metal',type:'vinyl',price:28.99,badge:'',c:'#080808',l:'#222222',localArt:'album covers/art-stronger-than-death.jpg'},
-  {id:71,title:'Mafia',artist:'Black Label Society',genre:'metal',type:'vinyl',hasBoth:true,price:28.99,badge:'staff',c:'#0a0000',l:'#3a0000',localArt:'album covers/art-mafia.jpg'},
+  {id:71,title:'Mafia',artist:'Black Label Society',genre:'metal',type:'vinyl',hasBoth:true,price:28.99,priceVinyl:28.99,priceCd:12.99,badge:'staff',c:'#0a0000',l:'#3a0000',localArt:'album covers/art-mafia.jpg'},
   {id:72,title:'Order of the Black',artist:'Black Label Society',genre:'metal',type:'vinyl',price:28.99,badge:'',c:'#040404',l:'#141414',localArt:'album covers/art-order-of-the-black.jpg'},
   {id:73,title:'Doom Crew Inc.',artist:'Black Label Society',genre:'metal',type:'vinyl',price:28.99,badge:'new',c:'#0e0800',l:'#3a2000',localArt:'album covers/art-doom-crew-inc.jpg'},
   {id:74,title:'thank u, next',artist:'Ariana Grande',genre:'pop',type:'cd',price:13.99,badge:'new',c:'#0a0206',l:'#3a0a1e',localArt:'album covers/art-thank-u-next.jpg'},
@@ -2464,7 +2464,7 @@ function cardHTML(p){
       <div class="card-artist">${p.artist}</div>
       <div class="card-title">${p.title}</div>
       <div class="card-footer">
-        <span class="card-price">$${p.price.toFixed(2)}</span>
+        <span class="card-price">${p.hasBoth?`$${p.priceCd.toFixed(2)} – $${p.priceVinyl.toFixed(2)}`:`$${p.price.toFixed(2)}`}</span>
         <span class="card-genre-tag">${genre}</span>
       </div>
     </div>
@@ -2522,6 +2522,8 @@ function showFmtModal(id){
   _fmtPendingId = id;
   document.getElementById('fmt-modal-title').textContent = p.title;
   document.getElementById('fmt-modal-artist').textContent = p.artist;
+  document.getElementById('fmt-btn-vinyl').innerHTML = `Vinyl LP<br><span style="font-size:13px;font-weight:400;letter-spacing:0;opacity:.85;">$${p.priceVinyl.toFixed(2)}</span>`;
+  document.getElementById('fmt-btn-cd').innerHTML = `CD<br><span style="font-size:13px;font-weight:400;letter-spacing:0;opacity:.85;">$${p.priceCd.toFixed(2)}</span>`;
   document.getElementById('fmt-overlay').classList.add('open');
 }
 function closeFmtModal(){
@@ -2546,9 +2548,10 @@ function addToCartDirect(id, fmt){
   const p = products.find(x=>x.id===id);
   if(!p) return;
   const key = fmt ? `${id}-${fmt}` : String(id);
+  const itemPrice = fmt==='cd' ? (p.priceCd||p.price) : fmt==='vinyl' ? (p.priceVinyl||p.price) : p.price;
   const ex = cart.find(x=>x._key===key);
   if(ex) ex.qty++;
-  else cart.push({...p, qty:1, _key:key, type:fmt||p.type});
+  else cart.push({...p, qty:1, _key:key, type:fmt||p.type, price:itemPrice});
   updateCount();
   const fl = fmt==='cd'?'CD':fmt==='vinyl'?'Vinyl LP':'';
   showToast(`"${p.title}"${fl?' ('+fl+')':''} added to cart`);
