@@ -2116,7 +2116,7 @@ const genres = [
 ];
 
 const products = [
-  {id:1, title:'Kind of Blue',artist:'Miles Davis',genre:'jazz',type:'vinyl',price:24.99,badge:'staff',c:'#0d2240',l:'#2a5a8a',artSearch:'Miles Davis Kind of Blue 1959'},
+  {id:1, title:'Kind of Blue',artist:'Miles Davis',genre:'jazz',type:'vinyl',price:24.99,badge:'staff',c:'#0d2240',l:'#2a5a8a',localArt:'album covers/art-kind-of-blue.jpg'},
   {id:2, title:'A Love Supreme',artist:'John Coltrane',genre:'jazz',type:'vinyl',price:29.99,badge:'rare',c:'#1d0d2e',l:'#5a3880'},
   {id:3, title:'Time Out',artist:'Dave Brubeck Quartet',genre:'jazz',type:'cd',price:14.99,badge:'sale',c:'#0d2018',l:'#256842'},
   {id:4, title:'Bitches Brew',artist:'Miles Davis',genre:'jazz',type:'vinyl',price:34.99,badge:'new',c:'#241400',l:'#8a5a00'},
@@ -2140,11 +2140,11 @@ const products = [
   {id:23,title:'1989',artist:'Taylor Swift',genre:'pop',type:'vinyl',price:32.99,badge:'new',c:'#0a0a12',l:'#303060'},
   {id:24,title:'Coat of Many Colors',artist:'Dolly Parton',genre:'country',type:'vinyl',price:26.99,badge:'',c:'#0e0806',l:'#5a2a06'},
   {id:25,title:'At Folsom Prison',artist:'Johnny Cash',genre:'country',type:'vinyl',price:28.99,badge:'staff',c:'#040404',l:'#181818'},
-  {id:26,title:'Random Access Memories',artist:'Daft Punk',genre:'electronic',type:'vinyl',price:44.99,badge:'new',c:'#0e0c00',l:'#4a4000',artSearch:'Daft Punk Random Access Memories'},
+  {id:26,title:'Random Access Memories',artist:'Daft Punk',genre:'electronic',type:'vinyl',price:44.99,badge:'new',c:'#0e0c00',l:'#4a4000',localArt:'album covers/art-random-access.jpg'},
   {id:27,title:'Homework',artist:'Daft Punk',genre:'electronic',type:'vinyl',price:36.99,badge:'',c:'#06060e',l:'#20206a'},
-  {id:28,title:'The Thrill Is Gone',artist:'B.B. King',genre:'blues',type:'vinyl',price:24.99,badge:'',c:'#06060e',l:'#12124a',artSearch:'BB King Live at the Regal'},
-  {id:29,title:'Exodus',artist:'Bob Marley & The Wailers',genre:'reggae',type:'vinyl',price:26.99,badge:'staff',c:'#060e06',l:'#124a12',artSearch:'Bob Marley Exodus album'},
-  {id:30,title:'Never Mind the Bollocks',artist:'Sex Pistols',genre:'punk',type:'vinyl',price:26.99,badge:'new',c:'#0e0000',l:'#6a0000',artSearch:'Sex Pistols Never Mind Bollocks'},
+  {id:28,title:'The Thrill Is Gone',artist:'B.B. King',genre:'blues',type:'vinyl',price:24.99,badge:'',c:'#06060e',l:'#12124a',localArt:'album covers/art-thrill-is-gone.jpg'},
+  {id:29,title:'Exodus',artist:'Bob Marley & The Wailers',genre:'reggae',type:'vinyl',price:26.99,badge:'staff',c:'#060e06',l:'#124a12',localArt:'album covers/art-exodus.png'},
+  {id:30,title:'Never Mind the Bollocks',artist:'Sex Pistols',genre:'punk',type:'vinyl',price:26.99,badge:'new',c:'#0e0000',l:'#6a0000',localArt:'album covers/art-bullocks.jpg'},
   {id:31,title:'The Four Seasons',artist:'Vivaldi / I. Perlman',genre:'classical',type:'vinyl',price:22.99,badge:'rare',c:'#0e0c00',l:'#4a3a00'},
 ];
 
@@ -2569,6 +2569,11 @@ function injectArtwork(pid, url) {
 
 async function loadAllArtwork() {
   for (const p of products) {
+    if (p.localArt) {
+      p._artworkUrl = p.localArt;
+      injectArtwork(p.id, p.localArt);
+      continue;
+    }
     const url = await fetchArtwork(p.artSearch || p.title, p.artist);
     if (url) {
       p._artworkUrl = url;
