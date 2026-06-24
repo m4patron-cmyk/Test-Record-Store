@@ -461,6 +461,9 @@
     .carousel-btn:hover { background: var(--bg4); border-color: var(--gold); }
     .carousel-btn.prev { left: -19px; }
     .carousel-btn.next { right: -19px; }
+    @media (hover: none) and (pointer: coarse) {
+      .carousel-btn { top: 30%; }
+    }
 
     /* ── PRODUCT CARD ──────────────────────────────── */
     .product-card {
@@ -2199,6 +2202,14 @@ const products = [
   {id:29,title:'Exodus',artist:'Bob Marley & The Wailers',genre:'reggae',type:'vinyl',price:26.99,badge:'staff',c:'#060e06',l:'#124a12',localArt:'album covers/art-exodus.png'},
   {id:30,title:'Never Mind the Bollocks',artist:'Sex Pistols',genre:'punk',type:'vinyl',price:26.99,badge:'new',c:'#0e0000',l:'#6a0000',localArt:'album covers/art-bullocks.jpg'},
   {id:31,title:'The Four Seasons',artist:'Vivaldi / I. Perlman',genre:'classical',type:'vinyl',price:22.99,badge:'rare',c:'#0e0c00',l:'#4a3a00',localArt:'album covers/art-four-seasons.jpg'},
+  {id:32,title:'Scream Bloody Gore',artist:'Death',genre:'metal',type:'vinyl',price:34.99,badge:'rare',c:'#1a0000',l:'#8a0000'},
+  {id:33,title:'Leprosy',artist:'Death',genre:'metal',type:'vinyl',price:32.99,badge:'rare',c:'#0a0800',l:'#3a2800'},
+  {id:34,title:'Spiritual Healing',artist:'Death',genre:'metal',type:'vinyl',price:29.99,badge:'',c:'#080e08',l:'#1a3a1a'},
+  {id:35,title:'Human',artist:'Death',genre:'metal',type:'vinyl',price:36.99,badge:'staff',c:'#060a10',l:'#182040',artSearch:'Human Death Chuck Schuldiner'},
+  {id:36,title:'Individual Thought Patterns',artist:'Death',genre:'metal',type:'vinyl',price:32.99,badge:'',c:'#0e0806',l:'#4a2806'},
+  {id:37,title:'Symbolic',artist:'Death',genre:'metal',type:'vinyl',price:34.99,badge:'staff',c:'#0a0a0a',l:'#2a2a2a',artSearch:'Symbolic Death Chuck Schuldiner'},
+  {id:38,title:'The Sound of Perseverance',artist:'Death',genre:'metal',type:'vinyl',price:36.99,badge:'new',c:'#080808',l:'#202020'},
+  {id:39,title:'Hymns from the Apocrypha',artist:'Suffocation',genre:'metal',type:'vinyl',price:29.99,badge:'new',c:'#0e0606',l:'#4a1206'},
 ];
 
 const staffPicks = [
@@ -2412,8 +2423,15 @@ function updateCount(){
 function openCart(){
   renderDrawer();
   document.getElementById('cart-overlay').classList.add('open');
+  const fab = document.getElementById('mob-cart-fab');
+  if(fab) fab.classList.add('hidden');
 }
-function closeCart(){ document.getElementById('cart-overlay').classList.remove('open'); }
+function closeCart(){
+  document.getElementById('cart-overlay').classList.remove('open');
+  const n = cart.reduce((s,x)=>s+x.qty,0);
+  const fab = document.getElementById('mob-cart-fab');
+  if(fab && n>0) fab.classList.remove('hidden');
+}
 function overlayClick(e){ if(e.target.id==='cart-overlay') closeCart(); }
 
 function removeFromCart(id){
