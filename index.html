@@ -544,7 +544,7 @@
     .badge-new  { background: var(--red);  color:#fff; }
     .badge-sale { background: var(--gold); color:#111; }
     .badge-staff{ background: var(--bg3);  color:var(--gold); border: 1px solid var(--gold-dim); }
-    .badge-rare { background: #4a1a7a; color:#e0b0ff; border: 1px solid #7a3aaa; }
+    .badge-rare { background: var(--gold-dim); color: var(--gold-l); border: 1px solid var(--gold); }
     .badge-preorder { background: #5500aa; color:#fff; border: 1px solid #7722cc; }
     .sale-chip.active, .sale-chip:hover { color: #c9963b; border-color: #c9963b; background: rgba(201,150,59,.12); }
     .rare-chip.active, .rare-chip:hover { color: #c080ff; border-color: #7a3aaa; background: rgba(120,50,180,.12); }
@@ -1114,6 +1114,15 @@
       display: grid;
       grid-template-columns: 2fr 1fr 1fr 1fr;
       gap: 48px;
+    }
+    .footer-brand .fb-logo {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+      margin-bottom: 16px;
+      box-shadow: 0 0 20px rgba(201,150,59,.2);
     }
     .footer-brand .fb-name {
       font-family: 'Bebas Neue', sans-serif;
@@ -2200,6 +2209,7 @@
 <footer>
   <div class="footer-inner">
     <div class="footer-brand">
+      <img src="store-logo.jpg" alt="Shellshock Records" class="fb-logo" onerror="this.style.display='none'">
       <div class="fb-name">Test Record Store</div>
       <div class="fb-sub">Fort Lauderdale · Florida</div>
       <p class="fb-desc">Your new independent record store. Vinyl records, CDs, and music across all genres. For music lovers by music lovers.</p>
