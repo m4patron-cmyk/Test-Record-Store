@@ -2282,8 +2282,8 @@ const products = [
   {id:80,title:'Enter the Wu-Tang (36 Chambers)',artist:'Wu-Tang Clan',genre:'rap',type:'vinyl',price:36.99,badge:'rare',c:'#0a0c04',l:'#2a3008'},
   {id:81,title:'Reasonable Doubt',artist:'Jay-Z',genre:'rap',type:'vinyl',price:39.99,badge:'rare',c:'#08080e',l:'#1a1a3a'},
   {id:83,title:'The Marshall Mathers LP',artist:'Eminem',genre:'rap',type:'vinyl',price:32.99,badge:'staff',c:'#0a0a0a',l:'#282828'},
-  {id:201,title:'Violence Unimagined',artist:'Cannibal Corpse',genre:'metal',type:'vinyl',price:34.99,badge:'preorder',releaseDate:'Aug 15, 2026',c:'#1a0000',l:'#7a0000',localArt:'album covers/art-violence-unimagined.jpg'},
-  {id:202,title:'Vile',artist:'Cannibal Corpse',genre:'metal',type:'vinyl',price:32.99,badge:'preorder',releaseDate:'Sep 12, 2026',c:'#0a0000',l:'#4a0000',localArt:'album covers/art-vile.jpg'},
+  {id:201,title:'Violence Unimagined',artist:'Cannibal Corpse',genre:'metal',type:'vinyl',price:34.99,badge:'preorder',releaseDate:'Aug 15, 2026',c:'#1a0000',l:'#7a0000',localArt:'album covers/art-violence-2.jpg'},
+  {id:202,title:'Vile',artist:'Cannibal Corpse',genre:'metal',type:'vinyl',price:32.99,badge:'preorder',releaseDate:'Sep 12, 2026',c:'#0a0000',l:'#4a0000',localArt:'album covers/art-vile-2.jpg'},
 ];
 
 const staffPicks = [
@@ -2469,9 +2469,10 @@ function cardHTML(p){
   const addBtnStyle = isPreorder ? ' style="background:#5500aa;"' : '';
   const addBtnText = isPreorder ? 'Pre-Order Now' : '+ Add to Cart';
   const typeStyle = '';
+  const cardTypeText = p.hasBoth ? 'CD + Vinyl LP' : (p.type==='cd' ? 'CD' : 'Vinyl LP');
   const priceStr = p.hasBoth ? `$${p.priceCd.toFixed(2)} – $${p.priceVinyl.toFixed(2)}` : `$${p.price.toFixed(2)}`;
   const genreTag = isPreorder && p.releaseDate
-    ? `<span class="card-genre-tag" style="font-size:9px;letter-spacing:.5px;">Out ${p.releaseDate}</span>`
+    ? `<span class="card-genre-tag" style="margin-left:auto;font-size:9px;letter-spacing:.5px;white-space:nowrap;">Out ${p.releaseDate}</span>`
     : `<span class="card-genre-tag">${genre}</span>`;
   return `<div class="product-card">
     <div class="card-art" data-pid="${p.id}">
@@ -2484,7 +2485,7 @@ function cardHTML(p){
       <div class="card-mob-ctrl" id="mob-ctrl-${p.id}"></div>
     </div>
     <div class="card-info">
-      <div class="card-type"${typeStyle}>${p.hasBoth?'CD + Vinyl LP':(p.type==='cd'?'CD':'Vinyl LP')}</div>
+      <div class="card-type"${typeStyle}>${cardTypeText}</div>
       <div class="card-artist">${p.artist}</div>
       <div class="card-title">${p.title}</div>
       <div class="card-footer">
