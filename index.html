@@ -271,15 +271,6 @@
       padding: 80px 64px;
       max-width: 700px;
     }
-    .hero-content-logo {
-      width: 110px;
-      height: 110px;
-      border-radius: 50%;
-      object-fit: cover;
-      display: block;
-      margin-bottom: 28px;
-      box-shadow: 0 0 40px rgba(201,150,59,.22), 0 0 80px rgba(42,82,201,.1);
-    }
     .hero-eyebrow {
       font-family: 'Oswald', sans-serif;
       font-size: 12px;
@@ -1804,10 +1795,10 @@
     <a href="#" class="logo-wrap">
       <!-- Logo: tries real image first, falls back to SVG recreation -->
       <img id="logo-img" src="store-logo.jpg" alt="Shellshock Records"
-           class="logo-svg" style="object-fit:contain;border-radius:4px;"
+           class="logo-svg" style="object-fit:contain;border-radius:50%;"
            onerror="logoErr(this)">
       <!-- Accurate SVG fallback — clamshell bivalve with eye, 4 lightning bolts -->
-      <svg id="logo-svg-fb" class="logo-svg" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" style="display:none">
+      <svg id="logo-svg-fb" class="logo-svg" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" style="display:none;width:0;height:0;">
         <defs>
           <!-- clip the upper shell half -->
           <clipPath id="cupClip">
@@ -1966,7 +1957,6 @@
     <img src="store-logo.jpg" alt="Shellshock Records" onerror="this.style.display='none'">
   </div>
   <div class="hero-content">
-    <img src="store-logo.jpg" alt="Shellshock Records" class="hero-content-logo" onerror="this.style.display='none'">
     <div class="hero-eyebrow">Fort Lauderdale's Independent Record Store</div>
     <h1>Your New<br><span class="red">Record</span><br>Store</h1>
     <p>Vinyl records, CDs &amp; music across every genre. New, used, rare &amp; hard to find. For music lovers by music lovers.</p>
