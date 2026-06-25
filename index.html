@@ -32,6 +32,7 @@
       min-height: 100vh;
       overflow-x: hidden;
       touch-action: pan-y;
+      padding-top: 72px;
     }
 
     /* ── TEST BANNER ───────────────────────────────── */
@@ -69,9 +70,12 @@
     header {
       background: var(--bg);
       border-bottom: 1px solid var(--border);
-      position: sticky;
+      position: fixed;
       top: 0;
-      z-index: 200;
+      left: 0;
+      right: 0;
+      width: 100%;
+      z-index: 300;
     }
     .header-inner {
       display: flex;
@@ -262,6 +266,7 @@
       z-index: 2;
     }
     @keyframes slowSpin { from{transform:translateY(-50%) rotate(0deg)} to{transform:translateY(-50%) rotate(360deg)} }
+    @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(1.4)} }
     .hero-content {
       position: relative;
       padding: 80px 64px;
@@ -540,9 +545,43 @@
     .badge-new  { background: var(--red);  color:#fff; }
     .badge-sale { background: var(--gold); color:#111; }
     .badge-staff{ background: var(--bg3);  color:var(--gold); border: 1px solid var(--gold-dim); }
-    .badge-rare { background: #4a1a7a; color:#e0b0ff; border: 1px solid #7a3aaa; }
+    .badge-rare { background: var(--gold-dim); color: var(--gold-l); border: 1px solid var(--gold); }
+    .badge-preorder { background: #5500aa; color:#e0b0ff; border: 1px solid #8833dd; }
     .sale-chip.active, .sale-chip:hover { color: #c9963b; border-color: #c9963b; background: rgba(201,150,59,.12); }
     .rare-chip.active, .rare-chip:hover { color: #c080ff; border-color: #7a3aaa; background: rgba(120,50,180,.12); }
+    .preorder-chip.active, .preorder-chip:hover { color: #cc88ff; border-color: #8833dd; background: rgba(120,0,220,.12); }
+
+    /* ── PAGINATION ──────────────────────────────────── */
+    .pagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 36px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .pg-btn {
+      font-family: 'Oswald', sans-serif;
+      font-size: 13px;
+      letter-spacing: 1px;
+      min-width: 36px;
+      height: 36px;
+      padding: 0 10px;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      cursor: pointer;
+      transition: all .15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .pg-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(201,150,59,.1); }
+    .pg-btn:hover:not(.active):not([disabled]) { border-color: var(--text); color: var(--text); }
+    .pg-btn[disabled] { opacity: 0.35; cursor: default; pointer-events: none; }
+    .pg-ellipsis { color: var(--muted2); padding: 0 4px; font-family:'Oswald',sans-serif; font-size:13px; }
 
     .card-info { padding: 14px; }
     .card-type {
@@ -1634,59 +1673,57 @@
       color: var(--muted); font-size: 26px; cursor: pointer;
     }
 
-    /* ── MOBILE CARD CONTROLS (touch devices only) ── */
-    .card-mob-ctrl { display: none; }
-    @media (hover: none) and (pointer: coarse) {
-      .card-overlay { display: none !important; }
-      .card-mob-ctrl {
-        display: flex;
-        position: absolute;
-        bottom: 8px; right: 8px;
-        z-index: 4;
-        align-items: center;
-        gap: 3px;
-      }
-      .cmob-add {
-        background: var(--red);
-        color: #fff;
-        border: none;
-        width: 34px; height: 34px;
-        font-size: 22px; font-weight: 700;
-        cursor: pointer;
-        border-radius: 4px;
-        display: flex; align-items: center; justify-content: center;
-        line-height: 1;
-      }
-      .cmob-minus {
-        background: rgba(30,30,30,.92);
-        color: #fff;
-        border: 1px solid var(--border);
-        width: 30px; height: 30px;
-        font-size: 15px;
-        cursor: pointer;
-        border-radius: 4px;
-        display: flex; align-items: center; justify-content: center;
-      }
-      .cmob-qty {
-        background: rgba(20,20,20,.9);
-        color: var(--text);
-        font-family: 'Oswald', sans-serif;
-        font-size: 14px; font-weight: 600;
-        min-width: 26px; text-align: center;
-        padding: 5px 4px;
-        border-radius: 3px;
-      }
-      .cmob-plus {
-        background: var(--red);
-        color: #fff;
-        border: none;
-        width: 30px; height: 30px;
-        font-size: 18px; font-weight: 700;
-        cursor: pointer;
-        border-radius: 4px;
-        display: flex; align-items: center; justify-content: center;
-      }
+    /* ── CARD QUANTITY CONTROLS (all devices) ── */
+    .card-mob-ctrl {
+      display: flex;
+      position: absolute;
+      bottom: 8px; right: 8px;
+      z-index: 4;
+      align-items: center;
+      gap: 3px;
     }
+    .cmob-add {
+      background: var(--red);
+      color: #fff;
+      border: none;
+      width: 34px; height: 34px;
+      font-size: 22px; font-weight: 700;
+      cursor: pointer;
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      line-height: 1;
+    }
+    .cmob-minus {
+      background: rgba(30,30,30,.92);
+      color: #fff;
+      border: 1px solid var(--border);
+      width: 30px; height: 30px;
+      font-size: 15px;
+      cursor: pointer;
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .cmob-qty {
+      background: rgba(20,20,20,.9);
+      color: var(--text);
+      font-family: 'Oswald', sans-serif;
+      font-size: 14px; font-weight: 600;
+      min-width: 26px; text-align: center;
+      padding: 5px 4px;
+      border-radius: 3px;
+    }
+    .cmob-plus {
+      background: var(--red);
+      color: #fff;
+      border: none;
+      width: 30px; height: 30px;
+      font-size: 18px; font-weight: 700;
+      cursor: pointer;
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    /* Quantity controls handle add-to-cart — overlay not needed on any device */
+    .card-overlay { display: none !important; }
     @media (max-width: 900px) {
       .footer-inner { grid-template-columns: 1fr 1fr; }
       .about-grid { grid-template-columns: 1fr; gap: 40px; }
@@ -1735,9 +1772,9 @@
 <!-- SHIPPING BAR -->
 <div class="ship-bar">
   <div class="ship-center">
-    <span>Fort Lauderdale, FL</span>
+    <span>Miami, FL</span>
     <span class="dot">●</span>
-    <a href="tel:7542278300">754-227-8300</a>
+    <a href="tel:7865034127">786-503-4127</a>
     <span class="dot">●</span>
     <span>Mon/Thu/Fri 12–6 · Sat 11–6 · Sun 12–5 · Closed Tue–Wed</span>
   </div>
@@ -1752,118 +1789,59 @@
 <header>
   <div class="header-inner">
     <a href="#" class="logo-wrap">
-      <!-- Logo: tries real image first, falls back to SVG recreation -->
-      <img id="logo-img" src="store-logo.jpg" alt="Shellshock Records"
-           class="logo-svg" style="object-fit:contain;border-radius:4px;"
-           onerror="logoErr(this)">
-      <!-- Accurate SVG fallback — clamshell bivalve with eye, 4 lightning bolts -->
-      <svg id="logo-svg-fb" class="logo-svg" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" style="display:none">
+      <!-- Generic vinyl logo -->
+      <svg id="logo-svg-fb" class="logo-svg" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <!-- clip the upper shell half -->
-          <clipPath id="cupClip">
-            <path d="M 50,120 C 50,70 80,44 120,44 C 160,44 190,70 190,120 Z"/>
-          </clipPath>
-          <!-- clip the lower shell half -->
-          <clipPath id="cloDnClip">
-            <path d="M 50,120 C 50,170 80,196 120,196 C 160,196 190,170 190,120 Z"/>
-          </clipPath>
-          <!-- gold ring gradient -->
-          <linearGradient id="goldRing" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#e8c84a"/>
-            <stop offset="50%" stop-color="#c8a020"/>
-            <stop offset="100%" stop-color="#e8c84a"/>
-          </linearGradient>
+          <radialGradient id="vg" cx="38%" cy="32%" r="70%">
+            <stop offset="0%" stop-color="#2e2e2e"/>
+            <stop offset="100%" stop-color="#080808"/>
+          </radialGradient>
+          <radialGradient id="lg" cx="50%" cy="38%" r="65%">
+            <stop offset="0%" stop-color="#f2e4b0"/>
+            <stop offset="100%" stop-color="#c4982a"/>
+          </radialGradient>
+          <radialGradient id="sheen" cx="30%" cy="25%" r="60%">
+            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.06"/>
+            <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+          </radialGradient>
         </defs>
-
-        <!-- ── BACKGROUND ── -->
-        <circle cx="120" cy="120" r="119" fill="#1c2c6b"/>
-        <!-- gold outer border ring -->
-        <circle cx="120" cy="120" r="117" fill="none" stroke="url(#goldRing)" stroke-width="5"/>
-        <!-- white inner ring (text separator) -->
-        <circle cx="120" cy="120" r="97" fill="none" stroke="#ffffff" stroke-width="2.5"/>
-
-        <!-- ── TEXT ARCS ── -->
-        <path id="tArc" d="M 27,120 A 93,93 0 0,1 213,120" fill="none"/>
-        <path id="bArc" d="M 30,132 A 93,93 0 0,0 210,132" fill="none"/>
-        <text font-family="Impact,Arial Black,sans-serif" font-size="21" fill="#fff" font-weight="900" letter-spacing="2.8">
-          <textPath href="#tArc" startOffset="7%">SHELLSHOCK</textPath>
+        <!-- Vinyl body -->
+        <circle cx="120" cy="120" r="118" fill="url(#vg)"/>
+        <!-- Sheen overlay -->
+        <circle cx="120" cy="120" r="118" fill="url(#sheen)"/>
+        <!-- Groove rings -->
+        <circle cx="120" cy="120" r="115" fill="none" stroke="#161616" stroke-width="1.2"/>
+        <circle cx="120" cy="120" r="109" fill="none" stroke="#161616" stroke-width="1"/>
+        <circle cx="120" cy="120" r="103" fill="none" stroke="#161616" stroke-width="1"/>
+        <circle cx="120" cy="120" r="97"  fill="none" stroke="#161616" stroke-width="1"/>
+        <circle cx="120" cy="120" r="91"  fill="none" stroke="#161616" stroke-width="1"/>
+        <circle cx="120" cy="120" r="85"  fill="none" stroke="#161616" stroke-width="1"/>
+        <circle cx="120" cy="120" r="79"  fill="none" stroke="#161616" stroke-width="1"/>
+        <circle cx="120" cy="120" r="73"  fill="none" stroke="#161616" stroke-width="1"/>
+        <circle cx="120" cy="120" r="67"  fill="none" stroke="#161616" stroke-width="1"/>
+        <!-- Center label -->
+        <circle cx="120" cy="120" r="58" fill="url(#lg)"/>
+        <!-- Label outer ring -->
+        <circle cx="120" cy="120" r="57" fill="none" stroke="#7a5010" stroke-width="1.8"/>
+        <!-- Label inner ring -->
+        <circle cx="120" cy="120" r="50" fill="none" stroke="#7a5010" stroke-width="0.8" opacity="0.5"/>
+        <!-- Text arc paths -->
+        <path id="ta" d="M 84,120 A 36,36 0 0,1 156,120" fill="none"/>
+        <path id="ba" d="M 86,127 A 36,36 0 0,0 154,127" fill="none"/>
+        <text font-family="Georgia,'Times New Roman',serif" font-size="12.5" fill="#2a1200" font-weight="bold" letter-spacing="1.2">
+          <textPath href="#ta" startOffset="6%">YOUR STORE</textPath>
         </text>
-        <text font-family="Impact,Arial Black,sans-serif" font-size="21" fill="#fff" font-weight="900" letter-spacing="8">
-          <textPath href="#bArc" startOffset="21%">RECORDS</textPath>
+        <text font-family="Georgia,'Times New Roman',serif" font-size="12.5" fill="#2a1200" font-weight="bold" letter-spacing="5">
+          <textPath href="#ba" startOffset="27%">HERE</textPath>
         </text>
-
-        <!-- ── LIGHTNING BOLTS (4 total — upper-left, lower-left, upper-right, lower-right) ── -->
-        <!-- Upper-left bolt -->
-        <path d="M 52,58  L 42,82  L 54,77  L 44,98  L 66,68  L 54,73  Z" fill="#d43010" stroke="#a02008" stroke-width="1"/>
-        <!-- Lower-left bolt -->
-        <path d="M 48,142 L 38,166 L 50,161 L 40,182 L 62,152 L 50,157 Z" fill="#d43010" stroke="#a02008" stroke-width="1"/>
-        <!-- Upper-right bolt -->
-        <path d="M 188,58  L 198,82  L 186,77  L 196,98  L 174,68  L 186,73  Z" fill="#d43010" stroke="#a02008" stroke-width="1"/>
-        <!-- Lower-right bolt -->
-        <path d="M 192,142 L 202,166 L 190,161 L 200,182 L 178,152 L 190,157 Z" fill="#d43010" stroke="#a02008" stroke-width="1"/>
-
-        <!-- ── UPPER SHELL HALF (clamshell top) ── -->
-        <!-- Base shape -->
-        <path d="M 54,122 C 54,74 82,46 120,46 C 158,46 186,74 186,122 Z" fill="#b8912e"/>
-        <!-- Shell ribs — radiating from center opening upward (clipped) -->
-        <g clip-path="url(#cupClip)">
-          <!-- center rib up -->
-          <line x1="120" y1="122" x2="120" y2="44"  stroke="#7a5010" stroke-width="3.5" opacity=".7"/>
-          <!-- ribs fanning left -->
-          <line x1="120" y1="122" x2="90"  y2="46"  stroke="#7a5010" stroke-width="3"   opacity=".65"/>
-          <line x1="120" y1="122" x2="64"  y2="58"  stroke="#7a5010" stroke-width="3"   opacity=".65"/>
-          <line x1="120" y1="122" x2="52"  y2="82"  stroke="#7a5010" stroke-width="3"   opacity=".6"/>
-          <line x1="120" y1="122" x2="54"  y2="108" stroke="#7a5010" stroke-width="2.5" opacity=".5"/>
-          <!-- ribs fanning right -->
-          <line x1="120" y1="122" x2="150" y2="46"  stroke="#7a5010" stroke-width="3"   opacity=".65"/>
-          <line x1="120" y1="122" x2="176" y2="58"  stroke="#7a5010" stroke-width="3"   opacity=".65"/>
-          <line x1="120" y1="122" x2="188" y2="82"  stroke="#7a5010" stroke-width="3"   opacity=".6"/>
-          <line x1="120" y1="122" x2="186" y2="108" stroke="#7a5010" stroke-width="2.5" opacity=".5"/>
-          <!-- gold highlights between ribs -->
-          <line x1="120" y1="122" x2="105" y2="45"  stroke="#e0b840" stroke-width="1.2" opacity=".45"/>
-          <line x1="120" y1="122" x2="78"  y2="50"  stroke="#e0b840" stroke-width="1.2" opacity=".45"/>
-          <line x1="120" y1="122" x2="58"  y2="70"  stroke="#e0b840" stroke-width="1.2" opacity=".4"/>
-          <line x1="120" y1="122" x2="135" y2="45"  stroke="#e0b840" stroke-width="1.2" opacity=".45"/>
-          <line x1="120" y1="122" x2="162" y2="50"  stroke="#e0b840" stroke-width="1.2" opacity=".45"/>
-          <line x1="120" y1="122" x2="182" y2="70"  stroke="#e0b840" stroke-width="1.2" opacity=".4"/>
-        </g>
-        <!-- Upper shell outline -->
-        <path d="M 54,122 C 54,74 82,46 120,46 C 158,46 186,74 186,122" fill="none" stroke="#5a3808" stroke-width="2.5"/>
-
-        <!-- ── LOWER SHELL HALF (clamshell bottom) ── -->
-        <path d="M 60,120 C 60,162 84,188 120,188 C 156,188 180,162 180,120 Z" fill="#b8912e"/>
-        <!-- Shell ribs radiating from center opening downward -->
-        <g clip-path="url(#cloDnClip)">
-          <!-- center rib down -->
-          <line x1="120" y1="120" x2="120" y2="190" stroke="#7a5010" stroke-width="3.5" opacity=".7"/>
-          <line x1="120" y1="120" x2="96"  y2="188" stroke="#7a5010" stroke-width="3"   opacity=".65"/>
-          <line x1="120" y1="120" x2="74"  y2="180" stroke="#7a5010" stroke-width="3"   opacity=".65"/>
-          <line x1="120" y1="120" x2="62"  y2="158" stroke="#7a5010" stroke-width="2.5" opacity=".6"/>
-          <line x1="120" y1="120" x2="144" y2="188" stroke="#7a5010" stroke-width="3"   opacity=".65"/>
-          <line x1="120" y1="120" x2="166" y2="180" stroke="#7a5010" stroke-width="3"   opacity=".65"/>
-          <line x1="120" y1="120" x2="178" y2="158" stroke="#7a5010" stroke-width="2.5" opacity=".6"/>
-          <!-- highlights -->
-          <line x1="120" y1="120" x2="108" y2="189" stroke="#e0b840" stroke-width="1.2" opacity=".4"/>
-          <line x1="120" y1="120" x2="85"  y2="184" stroke="#e0b840" stroke-width="1.2" opacity=".4"/>
-          <line x1="120" y1="120" x2="132" y2="189" stroke="#e0b840" stroke-width="1.2" opacity=".4"/>
-          <line x1="120" y1="120" x2="155" y2="184" stroke="#e0b840" stroke-width="1.2" opacity=".4"/>
-        </g>
-        <!-- Lower shell outline -->
-        <path d="M 60,120 C 60,162 84,188 120,188 C 156,188 180,162 180,120" fill="none" stroke="#5a3808" stroke-width="2.5"/>
-
-        <!-- ── EYE (center, between shell halves) ── -->
-        <!-- White sclera -->
-        <circle cx="120" cy="120" r="22" fill="#ffffff" stroke="#d4a830" stroke-width="2"/>
-        <!-- Red iris -->
-        <circle cx="120" cy="120" r="14" fill="#cc2a14"/>
-        <!-- Dark pupil -->
-        <circle cx="120" cy="120" r="6"  fill="#0a0404"/>
-        <!-- Catchlight -->
-        <circle cx="114" cy="114" r="4"  fill="#ffffff" opacity=".7"/>
+        <!-- Decorative dash ring on label -->
+        <circle cx="120" cy="120" r="22" fill="none" stroke="#7a5010" stroke-width="1" opacity="0.55"/>
+        <!-- Center hole -->
+        <circle cx="120" cy="120" r="5.5" fill="#080808" stroke="#5a3a08" stroke-width="1.2"/>
       </svg>
       <div class="logo-text">
         <div class="l1">Test Record Store</div>
-        <div class="l2">Vinyl · CDs · Fort Lauderdale</div>
+        <div class="l2">Vinyl · CDs · Miami</div>
         <div class="l3">Demo Website</div>
       </div>
     </a>
@@ -1875,6 +1853,7 @@
         <div class="dropdown-menu" id="genre-dropdown-menu"></div>
       </div>
       <a href="#new-arrivals">New Arrivals</a>
+      <a href="#pre-orders">Pre-Orders</a>
       <a href="#staff-picks">Staff Picks</a>
       <a href="#events">Events</a>
       <a href="#about">About</a>
@@ -1898,6 +1877,7 @@
   <button class="mob-close" onclick="toggleMobileMenu()">✕</button>
   <a href="#home" onclick="toggleMobileMenu()">Home</a>
   <a href="#new-arrivals" onclick="toggleMobileMenu()">New Arrivals</a>
+  <a href="#pre-orders" onclick="toggleMobileMenu()">Pre-Orders</a>
   <a href="#staff-picks" onclick="toggleMobileMenu()">Staff Picks</a>
   <a href="#events" onclick="toggleMobileMenu()">Events</a>
   <a href="#about" onclick="toggleMobileMenu()">About</a>
@@ -1910,16 +1890,16 @@
 <section class="hero" id="home">
   <div class="hero-bg"></div>
   <div class="hero-logo-wrap" id="hero-logo-wrap">
-    <!-- SVG injected by JS as base layer; image overlays it if it loads -->
-    <img src="store-logo.jpg" alt="Shellshock Records" onerror="this.style.display='none'">
+    <!-- SVG injected by JS as base layer -->
   </div>
   <div class="hero-content">
-    <div class="hero-eyebrow">Fort Lauderdale's Independent Record Store</div>
+    <div class="hero-eyebrow">Miami's Independent Record Store</div>
     <h1>Your New<br><span class="red">Record</span><br>Store</h1>
     <p>Vinyl records, CDs &amp; music across every genre. New, used, rare &amp; hard to find. For music lovers by music lovers.</p>
     <p style="font-size:11px;letter-spacing:1px;color:var(--muted);margin-top:8px;opacity:.7;">Not affiliated with any existing business — this is a demo website.</p>
     <div class="hero-actions">
       <a href="#new-arrivals" class="btn-red">New Arrivals</a>
+      <a href="#pre-orders" class="btn-ghost">Pre-Orders</a>
       <a href="#browse" class="btn-ghost">Browse Genres</a>
     </div>
   </div>
@@ -1953,6 +1933,21 @@
   </div>
 </div>
 
+<!-- PRE-ORDERS carousel -->
+<div class="section-full" id="pre-orders" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div class="section-inner">
+    <div class="section-head">
+      <h2 style="color:var(--text);">Pre-Orders</h2>
+      <a href="#products" onclick="event.preventDefault();setGenre('preorder');document.getElementById('products').scrollIntoView({behavior:'smooth'})">View All Pre-Orders →</a>
+    </div>
+    <div class="carousel-wrap">
+      <button class="carousel-btn prev" onclick="scrollCarousel('preorder-carousel',-1)">‹</button>
+      <div class="carousel" id="preorder-carousel"></div>
+      <button class="carousel-btn next" onclick="scrollCarousel('preorder-carousel',1)">›</button>
+    </div>
+  </div>
+</div>
+
 <!-- BROWSE GENRES -->
 <div class="genres-bg" id="browse">
   <div class="section">
@@ -1978,10 +1973,11 @@
       </div>
       <div class="search-box">
         <button><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
-        <input type="text" id="search-input" placeholder="Search title or artist…" oninput="renderProducts()"/>
+        <input type="text" id="search-input" placeholder="Search title or artist…" oninput="currentPage=1;renderProducts()"/>
       </div>
     </div>
     <div class="product-grid" id="product-grid"></div>
+    <div class="pagination" id="pagination"></div>
   </div>
 </div>
 
@@ -2014,61 +2010,21 @@
       </div>
       <div class="about-location">
         <div class="loc-label">Find Us</div>
-        <div class="loc-address">603 NE 13th Street<br>Fort Lauderdale<br>Florida 33304</div>
+        <div class="loc-address">2847 NW 36th Avenue<br>Miami<br>Florida 33142</div>
         <div class="loc-map-placeholder">
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3582.6!2d-80.1367!3d26.1284!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88d9001e6d9c7a0b%3A0xa1a3e9e1e1e1e1e1!2s603+NE+13th+St%2C+Fort+Lauderdale%2C+FL+33304!5e0!3m2!1sen!2sus!4v1"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3593.2!2d-80.2301!3d25.8009!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88d9b8a0e1e1e1e1%3A0xb2b3c4d5e6f7a8b9!2s2847+NW+36th+Ave%2C+Miami%2C+FL+33142!5e0!3m2!1sen!2sus!4v1"
             allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
           </iframe>
         </div>
-        <div class="loc-detail">Near Wilton Manors · Free street parking available</div>
-        <a class="loc-btn" href="https://maps.google.com/?q=603+NE+13th+Street+Fort+Lauderdale+FL+33304" target="_blank">Get Directions →</a>
+        <div class="loc-detail">Near Wynwood Arts District · Free street parking available</div>
+        <a class="loc-btn" href="https://maps.google.com/?q=2847+NW+36th+Avenue+Miami+FL+33142" target="_blank">Get Directions →</a>
       </div>
     </div>
   </div>
 </div>
 
-<!-- STORE PHOTO GALLERY -->
-<div style="background:var(--bg);padding-bottom:64px;">
-  <div style="max-width:1400px;margin:0 auto;padding:0 32px;">
-    <div class="section-head" style="margin-bottom:20px;">
-      <h2>Inside the Store</h2>
-      <span style="font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);">Fort Lauderdale, FL</span>
-    </div>
-  </div>
-  <div class="store-gallery">
-    <!-- Save your store interior photo as "store-interior.jpg" in the Record store test folder -->
-    <div class="gallery-item">
-      <img src="store-interior.jpg" alt="Shellshock Records interior"
-           onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-      <div class="gallery-placeholder" style="display:none;">
-        <span class="ph-icon"></span>
-        <span>Save store interior photo as<br><strong>store-interior.jpg</strong><br>in the Record store test folder</span>
-      </div>
-      <div class="gallery-caption">The shop floor — Fort Lauderdale, FL</div>
-    </div>
-    <!-- Save your exterior/fisheye photo as "store-exterior.jpg" -->
-    <div class="gallery-item">
-      <img src="store-exterior.jpg" alt="Shellshock Records exterior"
-           onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-      <div class="gallery-placeholder" style="display:none;">
-        <span class="ph-icon"></span>
-        <span>Save exterior photo as<br><strong>store-exterior.jpg</strong><br>in the Record store test folder</span>
-      </div>
-      <div class="gallery-caption">603 NE 13th Street</div>
-    </div>
-    <!-- Save your mural/logo wall photo as "store-mural.jpg" -->
-    <div class="gallery-item">
-      <img src="store-mural.jpg" alt="Shellshock Records mural"
-           onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-      <div class="gallery-placeholder" style="display:none;">
-        <span class="ph-icon"></span>
-        <span>Save mural photo as<br><strong>store-mural.jpg</strong><br>in the Record store test folder</span>
-      </div>
-      <div class="gallery-caption">The Shellshock Records mural</div>
-    </div>
-  </div>
-</div>
+<!-- STORE PHOTO GALLERY REMOVED -->
 
 <!-- CONTACT -->
 <div class="contact-bg" id="contact">
@@ -2080,7 +2036,7 @@
       <div class="contact-box">
         <span class="contact-box-icon"></span>
         <div class="contact-box-label">Phone</div>
-        <div class="contact-box-val"><a href="tel:7542278300">754-227-8300</a></div>
+        <div class="contact-box-val"><a href="tel:7865034127">786-503-4127</a></div>
       </div>
       <div class="contact-box">
         <span class="contact-box-icon"></span>
@@ -2103,16 +2059,13 @@
       <div class="contact-box">
         <span class="contact-box-icon"></span>
         <div class="contact-box-label">Location</div>
-        <div class="contact-box-val">603 NE 13th St<br>Ft Lauderdale, FL 33304</div>
+        <div class="contact-box-val">2847 NW 36th Ave<br>Miami, FL 33142</div>
         <a href="https://www.instagram.com/shellshockrecs/" target="_blank" style="display:block;margin-top:14px;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--muted)'">Instagram →</a>
-      </div>
-      <div class="contact-logo-box">
-        <img src="store-logo.jpg" alt="Shellshock Records">
       </div>
       <!-- Map spans full width below the 5 boxes -->
       <div style="grid-column:1/-1;border:1px solid var(--border);overflow:hidden;height:240px;">
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3582.6!2d-80.1367!3d26.1284!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88d9001e6d9c7a0b%3A0xa1a3e9e1e1e1e1e1!2s603+NE+13th+St%2C+Fort+Lauderdale%2C+FL+33304!5e0!3m2!1sen!2sus!4v1"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3593.2!2d-80.2301!3d25.8009!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88d9b8a0e1e1e1e1%3A0xb2b3c4d5e6f7a8b9!2s2847+NW+36th+Ave%2C+Miami%2C+FL+33142!5e0!3m2!1sen!2sus!4v1"
           width="100%" height="100%" style="border:0;display:block;filter:grayscale(1) invert(1) contrast(.85);"
           allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
         </iframe>
@@ -2173,7 +2126,7 @@
     <div class="footer-col">
       <h4>Connect</h4>
       <a href="https://www.instagram.com/shellshockrecs/" target="_blank">Instagram</a>
-      <a href="tel:7542278300">754-227-8300</a>
+      <a href="tel:7865034127">786-503-4127</a>
       <a href="mailto:info@testrecordstore.com">Email Us</a>
     </div>
   </div>
@@ -2195,7 +2148,7 @@
       <button onclick="copyContactEmail(this)">Copy Email</button>
     </div>
     <div class="contact-modal-links">
-      <a href="tel:7542278300">754-227-8300</a>
+      <a href="tel:7865034127">786-503-4127</a>
       <a href="https://www.instagram.com/shellshockrecordsfl/" target="_blank">Instagram →</a>
       <a href="#contact" onclick="closeContactModal()">Full Contact Info →</a>
     </div>
@@ -2329,6 +2282,8 @@ const products = [
   {id:80,title:'Enter the Wu-Tang (36 Chambers)',artist:'Wu-Tang Clan',genre:'rap',type:'vinyl',price:36.99,badge:'rare',c:'#0a0c04',l:'#2a3008'},
   {id:81,title:'Reasonable Doubt',artist:'Jay-Z',genre:'rap',type:'vinyl',price:39.99,badge:'rare',c:'#08080e',l:'#1a1a3a'},
   {id:83,title:'The Marshall Mathers LP',artist:'Eminem',genre:'rap',type:'vinyl',price:32.99,badge:'staff',c:'#0a0a0a',l:'#282828'},
+  {id:201,title:'Violence Unimagined',artist:'Cannibal Corpse',genre:'metal',type:'vinyl',price:34.99,badge:'preorder',releaseDate:'Aug 15, 2026',c:'#1a0000',l:'#7a0000',localArt:'album covers/art-violence-unimagined.jpg'},
+  {id:202,title:'Vile',artist:'Cannibal Corpse',genre:'metal',type:'vinyl',price:32.99,badge:'preorder',releaseDate:'Sep 12, 2026',c:'#0a0000',l:'#4a0000',localArt:'album covers/art-vile.jpg'},
 ];
 
 const staffPicks = [
@@ -2353,6 +2308,8 @@ const nowPlaying = [
 let cart = [];
 let activeGenre = 'all';
 let activeType  = 'all';
+let currentPage = 1;
+function getPageSize(){ return window.innerWidth <= 680 ? 20 : 24; }
 
 /* ─── SVG HELPERS ───────────────────────────────────── */
 function vinylSVG(c,l,size=200){
@@ -2394,7 +2351,11 @@ function initGenreDropdown(){
   if(!menu) return;
   const saleCnt = products.filter(p=>p.badge==='sale').length;
   const rareCnt = products.filter(p=>p.badge==='rare').length;
+  const preorderCnt = products.filter(p=>p.badge==='preorder').length;
+  const newCnt = products.filter(p=>p.badge==='new').length;
   const special = [
+    `<a href="#products" onclick="event.preventDefault();setGenre('new')">New Arrivals (${newCnt})</a>`,
+    `<a href="#pre-orders" onclick="event.preventDefault();document.getElementById('pre-orders').scrollIntoView({behavior:'smooth'})">Pre-Orders (${preorderCnt})</a>`,
     `<a href="#products" onclick="event.preventDefault();setGenre('sale')">On Sale (${saleCnt})</a>`,
     `<a href="#products" onclick="event.preventDefault();setGenre('rare')">Rare (${rareCnt})</a>`,
   ].join('');
@@ -2408,10 +2369,15 @@ function renderGenreChips(){
   const el = document.getElementById('genre-chips');
   const saleCnt = products.filter(p=>p.badge==='sale').length;
   const rareCnt = products.filter(p=>p.badge==='rare').length;
-  const allChip = `<button class="genre-chip ${activeGenre==='all'?'active':''}" onclick="setGenre('all')">All (${products.length})</button>`;
+  const preorderCnt = products.filter(p=>p.badge==='preorder').length;
+  const newCnt = products.filter(p=>p.badge==='new').length;
+  const allCnt = products.filter(p=>p.badge!=='preorder').length;
+  const allChip = `<button class="genre-chip ${activeGenre==='all'?'active':''}" onclick="setGenre('all')">All (${allCnt})</button>`;
+  const newChip = `<button class="genre-chip ${activeGenre==='new'?'active':''}" onclick="setGenre('new')">New Arrivals (${newCnt})</button>`;
+  const preorderChip = `<button class="genre-chip preorder-chip ${activeGenre==='preorder'?'active':''}" onclick="setGenre('preorder')">Pre-Orders (${preorderCnt})</button>`;
   const saleChip = `<button class="genre-chip sale-chip ${activeGenre==='sale'?'active':''}" onclick="setGenre('sale')">On Sale (${saleCnt})</button>`;
   const rareChip = `<button class="genre-chip rare-chip ${activeGenre==='rare'?'active':''}" onclick="setGenre('rare')">Rare (${rareCnt})</button>`;
-  el.innerHTML = allChip + saleChip + rareChip + genres.map(g=>{
+  el.innerHTML = allChip + newChip + preorderChip + saleChip + rareChip + genres.map(g=>{
     const cnt = products.filter(p=>p.genre===g.id).length;
     return `<button class="genre-chip ${activeGenre===g.id?'active':''}" onclick="setGenre('${g.id}')">${g.name} (${cnt})</button>`;
   }).join('');
@@ -2423,23 +2389,71 @@ function renderProducts(){
   let list = products.filter(p=>{
     if(activeGenre==='sale' && p.badge!=='sale') return false;
     if(activeGenre==='rare' && p.badge!=='rare') return false;
-    if(activeGenre!=='all' && activeGenre!=='sale' && activeGenre!=='rare' && p.genre!==activeGenre) return false;
+    if(activeGenre==='preorder' && p.badge!=='preorder') return false;
+    if(activeGenre==='new' && p.badge!=='new') return false;
+    if(activeGenre==='all' && p.badge==='preorder') return false; // hide preorders from 'all' view
+    if(activeGenre!=='all' && activeGenre!=='sale' && activeGenre!=='rare' && activeGenre!=='preorder' && activeGenre!=='new' && p.genre!==activeGenre) return false;
     if(activeType !=='all' && p.type !==activeType && !p.hasBoth) return false;
     if(q && !p.title.toLowerCase().includes(q) && !p.artist.toLowerCase().includes(q)) return false;
     return true;
   }).sort((a,b)=>a.artist.localeCompare(b.artist));
-  document.getElementById('showing-label').textContent=`Showing ${list.length} item${list.length!==1?'s':''}`;
-  document.getElementById('product-grid').innerHTML = list.length
-    ? list.map(p=>cardHTML(p,'grid')).join('')
+  const ps = getPageSize();
+  const total = list.length;
+  const totalPages = Math.max(1, Math.ceil(total / ps));
+  if(currentPage > totalPages) currentPage = 1;
+  const start = (currentPage - 1) * ps;
+  const pageList = list.slice(start, start + ps);
+  if(total === 0){
+    document.getElementById('showing-label').textContent = 'No items found';
+  } else {
+    document.getElementById('showing-label').textContent = `Showing ${start+1}–${Math.min(start+ps,total)} of ${total} item${total!==1?'s':''}`;
+  }
+  document.getElementById('product-grid').innerHTML = pageList.length
+    ? pageList.map(p=>cardHTML(p)).join('')
     : `<div style="grid-column:1/-1;text-align:center;padding:80px 0;color:var(--muted);">
         <p style="font-family:'Oswald',sans-serif;letter-spacing:2px;text-transform:uppercase;font-size:14px;color:var(--muted);margin-top:60px;">No results found</p>
       </div>`;
   renderAllMobCtrls();
+  renderPagination(totalPages, total);
+}
+
+function renderPagination(totalPages, total){
+  const el = document.getElementById('pagination');
+  if(!el) return;
+  if(totalPages <= 1){ el.innerHTML=''; return; }
+  let html = `<button class="pg-btn" onclick="goToPage(${currentPage-1})" ${currentPage===1?'disabled':''} aria-label="Previous">‹</button>`;
+  for(let i=1; i<=totalPages; i++){
+    if(totalPages > 7){
+      if(i===1 || i===totalPages || (i>=currentPage-2 && i<=currentPage+2)){
+        html += `<button class="pg-btn${i===currentPage?' active':''}" onclick="goToPage(${i})">${i}</button>`;
+      } else if(i===currentPage-3 || i===currentPage+3){
+        html += `<span class="pg-ellipsis">…</span>`;
+      }
+    } else {
+      html += `<button class="pg-btn${i===currentPage?' active':''}" onclick="goToPage(${i})">${i}</button>`;
+    }
+  }
+  html += `<button class="pg-btn" onclick="goToPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''} aria-label="Next">›</button>`;
+  el.innerHTML = html;
+}
+
+function goToPage(p){
+  currentPage = p;
+  renderProducts();
+  document.getElementById('products').scrollIntoView({behavior:'smooth'});
 }
 
 function renderNewArrivals(){
   const list = products.filter(p=>p.badge==='new');
-  document.getElementById('new-carousel').innerHTML = list.map(p=>cardHTML(p,'carousel')).join('');
+  document.getElementById('new-carousel').innerHTML = list.map(p=>cardHTML(p)).join('');
+  list.forEach(p=>renderMobCtrl(p.id));
+}
+
+function renderPreOrders(){
+  const list = products.filter(p=>p.badge==='preorder');
+  const carousel = document.getElementById('preorder-carousel');
+  if(!carousel) return;
+  carousel.innerHTML = list.map(p=>cardHTML(p)).join('');
   list.forEach(p=>renderMobCtrl(p.id));
 }
 
@@ -2447,27 +2461,35 @@ function cardHTML(p){
   const art = p._artworkUrl
     ? `<img src="${p._artworkUrl}" alt="${p.title}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:1;">`
     : (p.type==='cd' ? cdSVG(220) : vinylSVG(p.c,p.l,220));
-  const badgeMap = {new:'badge-new',sale:'badge-sale',staff:'badge-staff',rare:'badge-rare'};
-  const badgeLbl = {new:'New',sale:'Sale',staff:'Staff Pick',rare:'Rare'};
-  const badge = p.badge ? `<div class="card-badge ${badgeMap[p.badge]}">${badgeLbl[p.badge]}</div>` : '';
+  const badgeMap = {new:'badge-new',sale:'badge-sale',staff:'badge-staff',rare:'badge-rare',preorder:'badge-preorder'};
+  const badgeLbl = {new:'New',sale:'Sale',staff:'Staff Pick',rare:'Rare',preorder:'Pre-Order'};
+  const badge = p.badge ? `<div class="card-badge ${badgeMap[p.badge]||''}">${badgeLbl[p.badge]||p.badge}</div>` : '';
   const genre = genres.find(g=>g.id===p.genre)?.name||p.genre;
+  const isPreorder = p.badge==='preorder';
+  const addBtnStyle = isPreorder ? ' style="background:#5500aa;"' : '';
+  const addBtnText = isPreorder ? 'Pre-Order Now' : '+ Add to Cart';
+  const typeStyle = '';
+  const priceStr = p.hasBoth ? `$${p.priceCd.toFixed(2)} – $${p.priceVinyl.toFixed(2)}` : `$${p.price.toFixed(2)}`;
+  const genreTag = isPreorder && p.releaseDate
+    ? `<span class="card-genre-tag" style="font-size:9px;letter-spacing:.5px;">Out ${p.releaseDate}</span>`
+    : `<span class="card-genre-tag">${genre}</span>`;
   return `<div class="product-card">
     <div class="card-art" data-pid="${p.id}">
       ${art}
       ${badge}
       ${!p.localArt ? `<div class="card-loading" id="cl-${p.id}">Loading...</div>` : ''}
       <div class="card-overlay">
-        <button class="card-add-btn" onclick="addToCart(${p.id})">+ Add to Cart</button>
+        <button class="card-add-btn"${addBtnStyle} onclick="addToCart(${p.id})">${addBtnText}</button>
       </div>
       <div class="card-mob-ctrl" id="mob-ctrl-${p.id}"></div>
     </div>
     <div class="card-info">
-      <div class="card-type">${p.hasBoth?'CD + Vinyl LP':(p.type==='cd'?'CD':'Vinyl LP')}</div>
+      <div class="card-type"${typeStyle}>${p.hasBoth?'CD + Vinyl LP':(p.type==='cd'?'CD':'Vinyl LP')}</div>
       <div class="card-artist">${p.artist}</div>
       <div class="card-title">${p.title}</div>
       <div class="card-footer">
-        <span class="card-price">${p.hasBoth?`$${p.priceCd.toFixed(2)} – $${p.priceVinyl.toFixed(2)}`:`$${p.price.toFixed(2)}`}</span>
-        <span class="card-genre-tag">${genre}</span>
+        <span class="card-price">${priceStr}</span>
+        ${genreTag}
       </div>
     </div>
   </div>`;
@@ -2496,15 +2518,22 @@ function renderStaffPicks(){
 /* ─── GENRE / TYPE FILTER ───────────────────────────── */
 function setGenre(id){
   activeGenre = id;
+  currentPage = 1;
   renderGenreChips();
   renderProducts();
   document.getElementById('products-h').textContent =
-    id==='all' ? 'All Records & CDs' : id==='sale' ? 'On Sale' : id==='rare' ? 'Rare Finds' : (genres.find(g=>g.id===id)?.name || id);
+    id==='all' ? 'All Records & CDs' :
+    id==='sale' ? 'On Sale' :
+    id==='rare' ? 'Rare Finds' :
+    id==='preorder' ? 'Pre-Orders' :
+    id==='new' ? 'New Arrivals' :
+    (genres.find(g=>g.id===id)?.name || id);
   document.getElementById('products').scrollIntoView({behavior:'smooth'});
 }
 
 function setType(t,btn){
   activeType=t;
+  currentPage=1;
   document.querySelectorAll('.type-pill').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   renderProducts();
@@ -2705,12 +2734,15 @@ function toggleMobileMenu(){
   const open = menu.classList.toggle('open');
   btn.classList.toggle('open', open);
   document.body.style.overflow = open ? 'hidden' : '';
-  // populate genre links once
   const mg = document.getElementById('mob-genres');
-  if(open && mg && !mg.children.length){
+  if(open && mg){
     const saleCnt = products.filter(p=>p.badge==='sale').length;
     const rareCnt = products.filter(p=>p.badge==='rare').length;
+    const preorderCnt = products.filter(p=>p.badge==='preorder').length;
+    const newCnt = products.filter(p=>p.badge==='new').length;
     mg.innerHTML =
+      `<a onclick="setGenre('new');toggleMobileMenu()">New Arrivals (${newCnt})</a>` +
+      `<a onclick="setGenre('preorder');toggleMobileMenu()">Pre-Orders (${preorderCnt})</a>` +
       `<a onclick="setGenre('sale');toggleMobileMenu()">On Sale (${saleCnt})</a>` +
       `<a onclick="setGenre('rare');toggleMobileMenu()">Rare (${rareCnt})</a>` +
       genres.map(g=>`<a onclick="setGenre('${g.id}');toggleMobileMenu()">${g.name}</a>`).join('');
@@ -2916,6 +2948,7 @@ initGenreDropdown();
 renderGenreChips();
 renderProducts();
 renderNewArrivals();
+renderPreOrders();
 renderStaffPicks();
 renderEvents();
 
